@@ -10,10 +10,6 @@ public class Account {
 
 	private int balance;
 	
-	
-	
-	
-
 	public Account(int number, int openingBalance) {
 		this.number = number;
 		this.balance = openingBalance;
