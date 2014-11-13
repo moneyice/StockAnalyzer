@@ -13,6 +13,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +45,59 @@ public class HistoryDataService {
 	}
 
 	public void startAnalyze() {
+		long mark=System.currentTimeMillis();
+		//startAnalyzeInSequence();
+		 startAnalyzeInParallel();
+		
+		long now=System.currentTimeMillis();
+		System.out.println("collapse "+((now-mark)/1000) + " seconds." );
+	}
+
+	class Task implements Runnable {
+		File file;
+
+		public Task(File file) {
+			this.file = file;
+		}
+
+		@Override
+		public void run() {
+			Stock stock = null;
+			try {
+				stock = getStockHistory(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if (stock != null) {
+				for (IStockAnalyzer analyzer : analyzers) {
+					analyzer.analyze(stock);
+				}
+			}
+		}
+
+	}
+
+	private void startAnalyzeInParallel() {
+		for (IStockAnalyzer analyzer : analyzers) {
+			analyzer.getResultwriter().write(analyzer.getDescription());
+		}
+
+		ExecutorService es = Executors.newFixedThreadPool(15);
+
+		File[] files = getFiles();
+		for (File file : files) {
+			Task task = new Task(file);
+			es.execute(task);
+		}
+		es.shutdown();
+		try {
+			es.awaitTermination(60, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void startAnalyzeInSequence() {
 		for (IStockAnalyzer analyzer : analyzers) {
 			analyzer.getResultwriter().write(analyzer.getDescription());
 		}
@@ -140,15 +196,14 @@ public class HistoryDataService {
 			try {
 				daily.setClose(Double.parseDouble(result[4]));
 				daily.setLow(Double.parseDouble(result[3]));
+				Date time = Utils.format(result[0]);
+				daily.setTime(time);
+				stock.getDailyinfo().add(daily);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-			Date time = Utils.format(result[0]);
-			daily.setTime(time);
-			stock.getDailyinfo().add(daily);
 		}
-
+		br.close();
 		return stock;
 	}
 
@@ -178,7 +233,7 @@ public class HistoryDataService {
 			} catch (Exception e) {
 				continue;
 			}
-			if(stock==null){
+			if (stock == null) {
 				continue;
 			}
 		}

@@ -11,10 +11,10 @@ public class Main {
 		try {
 			selector = new StockSelector();
 			//昨日重现选股
-//			selector.runYOMAnalyzer();
+			selector.runYOMAnalyzer();
 			
 			//Demark选股
-			selector.runDemarkAnalyzer();
+//			selector.runDemarkAnalyzer();
 
 		} catch (Exception e) {
 			e.printStackTrace();

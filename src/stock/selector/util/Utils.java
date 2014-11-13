@@ -1,8 +1,10 @@
 package stock.selector.util;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -10,9 +12,29 @@ public class Utils {
 	public static SimpleDateFormat SF = new SimpleDateFormat(timeformat);
 
 	public static SimpleDateFormat SF1 = new SimpleDateFormat("yyyy-MM-dd");
+	public static ReentrantLock lock = new ReentrantLock();
+	private static ThreadLocal<DateFormat> threadLocal = new ThreadLocal<DateFormat>() {
+		@Override
+		protected DateFormat initialValue() {
+			return new SimpleDateFormat(timeformat);
+		}
+	};
 
 	public static Date format(String strDate) throws ParseException {
-		return SF.parse(strDate);
+		
+		
+//		 lock.lock();
+//		 try {
+//		 return SF.parse(strDate);
+//		 } finally {
+//		 lock.unlock();
+//		 }
+
+//		synchronized (SF) {
+//			return SF.parse(strDate);
+//		}
+
+		return threadLocal.get().parse(strDate);
 	}
 
 	public static String format(Date time) {

@@ -32,7 +32,6 @@ public class StockSelector {
 
 		HistoryDataService hs = new HistoryDataService();
 		hs.setStockDataFolder(props.getProperty("stock.data.folder"));
-		//hs.setResultwriter(writer);
 
 		analyzer.setResultwriter(writer);
 
