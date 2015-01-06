@@ -34,6 +34,7 @@ public class StockCodeRetreiver2 {
 	String codeListHTML = "http://quote.eastmoney.com/stocklist.html";
 	private AerospikeClient client;
 	List<Stock> list = new ArrayList<Stock>();
+	private InputStreamReader is;
 
 	public void run() throws IOException {
 		Document doc = Jsoup.connect(codeListHTML).get();
@@ -43,7 +44,7 @@ public class StockCodeRetreiver2 {
 		for (Element element : codeList) {
 			String text = element.text();
 			String linkHref = element.attr("href"); // http://quote.eastmoney.com/sz300409.html
-			String market = linkHref.substring(27, 29);
+			String market = linkHref.substring(27, 29).toUpperCase();
 			String symbol = linkHref.substring(29, 35);
 			String name = text.substring(0, text.length() - 8);
 			System.out.println(market + "  " + symbol + "  " + name);
@@ -91,21 +92,16 @@ public class StockCodeRetreiver2 {
 		}
 	}
 
-	public Stock getStock(String symbol) throws IOException {
-		symbol = "SH" + symbol;
-		String url = "http://xueqiu.com/S/symbol/historical.csv";
-		url = url.replaceFirst("symbol", symbol);
-
-		Stock stock = new Stock();
-		stock.setCode(symbol);
-		stock.setName(symbol);
-
+	public Stock getStock(Stock stock) throws IOException {
+		String symbol = stock.getMarket() + stock.getCode();
+		String url = "http://xueqiu.com/S/#{symbol}/historical.csv";
+		url = url.replace("#{symbol}", symbol);
 		BufferedReader br = null;
 		try {
 			// Retrieve CSV File
-			URL yahoo = new URL(url);
-			URLConnection connection = yahoo.openConnection();
-			InputStreamReader is = new InputStreamReader(
+			URL xueqiuurl = new URL(url);
+			URLConnection connection = xueqiuurl.openConnection();
+			 is = new InputStreamReader(
 					connection.getInputStream());
 			br = new BufferedReader(is);
 			// pass the first head line
@@ -114,13 +110,14 @@ public class StockCodeRetreiver2 {
 			String line = br.readLine();
 			// Parse CSV Into Array
 			while ((line = br.readLine()) != null) {
+				line=line.replaceAll("\"", "");
 				String[] result = line.split(",");
 				DailyInfo daily = new DailyInfo();
 				double open = Utils.handleDouble(result[2]);
 				double high = Utils.handleDouble(result[3]);
 				double low = Utils.handleDouble(result[4]);
 				double close = Utils.handleDouble(result[5]);
-				double volume = Utils.handleInt(result[6]);
+				int volume = Utils.handleInt(result[6]);
 				Date date = null;
 				try {
 					date = Utils.parseDate(result[1]);
@@ -141,6 +138,10 @@ public class StockCodeRetreiver2 {
 			Logger log = Logger.getLogger(StockFetcher.class.getName());
 			log.log(Level.SEVERE, e.toString() + "  " + symbol);
 			throw e;
+		}finally{
+			if(is!=null){
+				is.close();
+			}
 		}
 		return stock;
 	}
@@ -150,8 +151,6 @@ public class StockCodeRetreiver2 {
 		// scr.run();
 		// scr.store();
 		// scr.getAllSymbols();
-		Stock stock = scr.getStock("601226");
-		System.out.println(stock);
 	}
 
 }
