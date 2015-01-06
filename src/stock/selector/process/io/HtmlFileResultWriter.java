@@ -22,7 +22,7 @@ public class HtmlFileResultWriter extends FileResultWriter {
 			sb.append("</td>");
 			
 			sb.append("<td>");
-			sb.append(result.getStock().getSymbol());
+			sb.append(result.getStock().getName());
 			sb.append("</td>");
 			
 			sb.append("<td>");

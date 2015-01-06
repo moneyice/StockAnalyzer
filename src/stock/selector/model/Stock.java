@@ -7,7 +7,16 @@ public class Stock {
 	List<DailyInfo> dailyinfo = new ArrayList<DailyInfo>();
 
 	String code;
-	String symbol;
+	String name;
+	String market;
+
+	public String getMarket() {
+		return market;
+	}
+
+	public void setMarket(String market) {
+		this.market = market;
+	}
 
 	public List<DailyInfo> getDailyinfo() {
 		return dailyinfo;
@@ -25,11 +34,11 @@ public class Stock {
 		this.code = code;
 	}
 
-	public String getSymbol() {
-		return symbol;
+	public String getName() {
+		return name;
 	}
 
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
+	public void setName(String name) {
+		this.name = name;
 	}
 }

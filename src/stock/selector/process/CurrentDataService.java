@@ -103,7 +103,7 @@ public class CurrentDataService {
 			ParseException {
 		Stock stock = new Stock();
 		stock.setCode(symbol);
-		stock.setSymbol(symbol);
+		stock.setName(symbol);
 		BufferedReader br = null;
 		try {
 			// Retrieve CSV File

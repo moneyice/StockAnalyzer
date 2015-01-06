@@ -16,7 +16,7 @@ public class DemarkResultFormater implements IResultFormater {
 		}
 		List<DemarkSelectResult> results = (List<DemarkSelectResult>) list;
 		StringBuilder sb = new StringBuilder();
-		sb.append(stock.getCode()).append("  ").append(stock.getSymbol())
+		sb.append(stock.getCode()).append("  ").append(stock.getName())
 				.append("\n");
 		// 000001 平安银行
 		// 2012-2-12 (9) --- 2012-3-30 (13)

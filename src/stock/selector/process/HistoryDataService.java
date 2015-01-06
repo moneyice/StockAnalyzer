@@ -182,7 +182,7 @@ public class HistoryDataService {
 		String[] result = input.split(" ");
 		Stock stock = new Stock();
 		stock.setCode(result[0]);
-		stock.setSymbol(result[1]);
+		stock.setName(result[1]);
 
 		br.readLine();// pass the second line
 
@@ -244,7 +244,7 @@ public class HistoryDataService {
 			ParseException {
 		Stock stock = new Stock();
 		stock.setCode(symbol);
-		stock.setSymbol(symbol);
+		stock.setName(symbol);
 		BufferedReader br = null;
 		try {
 			// Retrieve CSV File

@@ -33,7 +33,7 @@ public class BenefitCalculator {
 				if (stock == null) {
 					stock = new Stock();
 					stock.setCode(code);
-					stock.setSymbol(name);
+					stock.setName(name);
 					stocks.put(code, stock);
 				}
 				DailyInfo di = new DailyInfo();
@@ -56,7 +56,7 @@ public class BenefitCalculator {
 					continue;
 				}
 				for (DailyInfo di : stock.getDailyinfo()) {
-					System.out.println(stock.getSymbol() + "  "+ di.getClose());
+					System.out.println(stock.getName() + "  "+ di.getClose());
 					sum+=di.getClose();
 				}
 			}
