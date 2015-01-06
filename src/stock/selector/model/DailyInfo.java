@@ -8,6 +8,15 @@ public class DailyInfo {
 	double high;
 	double low;
 	Date time;
+	int volume;
+
+	public int getVolume() {
+		return volume;
+	}
+
+	public void setVolume(int volume) {
+		this.volume = volume;
+	}
 
 	@Override
 	public int hashCode() {

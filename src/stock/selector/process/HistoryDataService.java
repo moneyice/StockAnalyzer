@@ -129,7 +129,7 @@ public class HistoryDataService {
 			Stock stock = null;
 			try {
 				stock = getStockHistory(symbol);
-				// System.out.println("succeed: " + symbol);
+				// System.out.prinahtln("succeed: " + symbol);
 			} catch (Exception e) {
 				// e.printStackTrace();
 				continue;
