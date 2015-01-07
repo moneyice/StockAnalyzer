@@ -2,9 +2,13 @@ package stock.selector.jobs;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
-public class StockCodeRetreiver {
+import stock.selector.model.Stock;
+
+public class LocalStockRetreiver implements IStockRetreiver {
 	String originalFilesRoot = "c:\\zd_zszq\\T0002\\export";
 
 	public void run() {
@@ -15,7 +19,7 @@ public class StockCodeRetreiver {
 			for (File file : files) {
 				String fileName = file.getName();
 				fileName = fileName.replace("SH", "SS");
-				String stockCode = fileName.substring(2, 8)+"."
+				String stockCode = fileName.substring(2, 8) + "."
 						+ fileName.substring(0, 2);
 
 				pw.println(stockCode);
@@ -32,8 +36,19 @@ public class StockCodeRetreiver {
 	}
 
 	public static void main(String[] args) {
-		StockCodeRetreiver scr = new StockCodeRetreiver();
+		LocalStockRetreiver scr = new LocalStockRetreiver();
 		scr.run();
+	}
+
+	@Override
+	public List<Stock> getAllStockSymbols() throws IOException {
+		return null;
+	}
+
+	@Override
+	public Stock getStockInfo(Stock stock) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

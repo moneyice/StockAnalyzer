@@ -30,13 +30,12 @@ import com.aerospike.client.policy.WritePolicy;
 import com.alibaba.fastjson.JSON;
 import com.nhefner.main.StockFetcher;
 
-public class StockCodeRetreiver2 {
+public class WebStockRetreiver implements IStockRetreiver {
 	String codeListHTML = "http://quote.eastmoney.com/stocklist.html";
-	private AerospikeClient client;
-	List<Stock> list = new ArrayList<Stock>();
-	private InputStreamReader is;
 
-	public void run() throws IOException {
+	@Override
+	public List<Stock> getAllStockSymbols() throws IOException {
+		List<Stock> list = new ArrayList<Stock>();
 		Document doc = Jsoup.connect(codeListHTML).get();
 		Elements codeList = doc.select("#quotesearch ul li a");
 		System.out.println(codeList.size());
@@ -54,55 +53,20 @@ public class StockCodeRetreiver2 {
 			stock.setMarket(market);
 			list.add(stock);
 		}
+		return list;
 	}
 
-	private void store() {
-		String allSymbols = JSON.toJSONString(list);
-		ClientPolicy cPolicy = new ClientPolicy();
-		cPolicy.timeout = 500;
-		this.client = new AerospikeClient(cPolicy, "172.20.2.19", 3000);
-
-		Key key = new Key("test", "Symbols", "allSymbols");
-		Bin bin = new Bin(null, allSymbols);
-
-		WritePolicy wPolicy = new WritePolicy();
-		wPolicy.recordExistsAction = RecordExistsAction.UPDATE;
-		client.put(wPolicy, key, bin);
-		if (this.client != null) {
-			this.client.close();
-		}
-	}
-
-	private void getAllSymbols() {
-		ClientPolicy cPolicy = new ClientPolicy();
-		cPolicy.timeout = 500;
-
-		this.client = new AerospikeClient(cPolicy, "172.20.2.19", 3000);
-		Key key = new Key("test", "Symbols", "allSymbols");
-		Record record = client.get(cPolicy.readPolicyDefault, key);
-		String rs = record.getValue("").toString();
-		System.out.println(rs);
-
-		List<Stock> stocks = JSON.parseArray(rs, Stock.class);
-
-		System.out.println(stocks);
-
-		if (this.client != null) {
-			this.client.close();
-		}
-	}
-
-	public Stock getStock(Stock stock) throws IOException {
+	public Stock getStockInfo(Stock stock) throws IOException {
 		String symbol = stock.getMarket() + stock.getCode();
 		String url = "http://xueqiu.com/S/#{symbol}/historical.csv";
 		url = url.replace("#{symbol}", symbol);
 		BufferedReader br = null;
+		InputStreamReader is = null;
 		try {
 			// Retrieve CSV File
 			URL xueqiuurl = new URL(url);
 			URLConnection connection = xueqiuurl.openConnection();
-			 is = new InputStreamReader(
-					connection.getInputStream());
+			is = new InputStreamReader(connection.getInputStream());
 			br = new BufferedReader(is);
 			// pass the first head line
 			// symbol, date, open, high, low, close, volume
@@ -110,7 +74,7 @@ public class StockCodeRetreiver2 {
 			String line = br.readLine();
 			// Parse CSV Into Array
 			while ((line = br.readLine()) != null) {
-				line=line.replaceAll("\"", "");
+				line = line.replaceAll("\"", "");
 				String[] result = line.split(",");
 				DailyInfo daily = new DailyInfo();
 				double open = Utils.handleDouble(result[2]);
@@ -138,8 +102,8 @@ public class StockCodeRetreiver2 {
 			Logger log = Logger.getLogger(StockFetcher.class.getName());
 			log.log(Level.SEVERE, e.toString() + "  " + symbol);
 			throw e;
-		}finally{
-			if(is!=null){
+		} finally {
+			if (is != null) {
 				is.close();
 			}
 		}
@@ -147,7 +111,7 @@ public class StockCodeRetreiver2 {
 	}
 
 	public static void main(String[] args) throws IOException {
-		StockCodeRetreiver2 scr = new StockCodeRetreiver2();
+		WebStockRetreiver scr = new WebStockRetreiver();
 		// scr.run();
 		// scr.store();
 		// scr.getAllSymbols();
