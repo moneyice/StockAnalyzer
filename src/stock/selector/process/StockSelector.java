@@ -31,13 +31,12 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		hs.setStockDataFolder(props.getProperty("stock.data.folder"));
 
 		analyzer.setResultwriter(writer);
 
 		hs.addAnalyzer(analyzer);
 
-//		hs.startAnalyzeFromYahoo();
+		// hs.startAnalyzeFromYahoo();
 		hs.startAnalyze();
 	}
 
@@ -46,26 +45,26 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		hs.setStockDataFolder(props.getProperty("stock.data.folder"));
 		analyzer.setResultwriter(writer);
 
 		hs.addAnalyzer(analyzer);
 
-//		hs.startAnalyzeFromYahoo();
+		// hs.startAnalyzeFromYahoo();
 		hs.startAnalyze();
 	}
-	
+
 	public IResultWriter getResultWriter() throws IOException {
 		Calendar cal = Calendar.getInstance();
 		String filename = "" + cal.get(Calendar.YEAR) + cal.get(Calendar.MONTH)
 				+ cal.get(Calendar.DAY_OF_MONTH) + "_"
-				+ cal.get(Calendar.HOUR_OF_DAY)
-				+ cal.get(Calendar.MINUTE)+".html";
+				+ cal.get(Calendar.HOUR_OF_DAY) + cal.get(Calendar.MINUTE)
+				+ ".html";
 		File root = new File("result");
-		IResultWriter writer = new HtmlFileResultWriter(new File(root, filename));
-		
+		IResultWriter writer = new HtmlFileResultWriter(
+				new File(root, filename));
+
 		writer = new ConsoleResultWriter();
-		
+
 		return writer;
 	}
 
