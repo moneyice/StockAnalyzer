@@ -62,6 +62,9 @@ public class StockDAO4Aerospike implements IStockDAO {
 		Record record = client.get(cPolicy.readPolicyDefault, key);
 		String rs = record.getValue("").toString();
 		System.out.println(rs);
+		if(rs==null){
+			return null;
+		}
 
 		Stock stock = JSON.parseObject(rs, Stock.class);
 
