@@ -21,18 +21,17 @@ public class Utils {
 	};
 
 	public static Date format(String strDate) throws ParseException {
-		
-		
-//		 lock.lock();
-//		 try {
-//		 return SF.parse(strDate);
-//		 } finally {
-//		 lock.unlock();
-//		 }
 
-//		synchronized (SF) {
-//			return SF.parse(strDate);
-//		}
+		// lock.lock();
+		// try {
+		// return SF.parse(strDate);
+		// } finally {
+		// lock.unlock();
+		// }
+
+		// synchronized (SF) {
+		// return SF.parse(strDate);
+		// }
 
 		return threadLocal.get().parse(strDate);
 	}
@@ -65,6 +64,16 @@ public class Utils {
 			y = 0;
 		} else {
 			y = Integer.parseInt(x);
+		}
+		return y;
+	}
+
+	public static long handleLong(String x) {
+		long y;
+		if (Pattern.matches("N/A", x)) {
+			y = 0;
+		} else {
+			y = Long.parseLong(x);
 		}
 		return y;
 	}

@@ -8,13 +8,13 @@ public class DailyInfo {
 	double high;
 	double low;
 	Date time;
-	int volume;
+	long volume;
 
-	public int getVolume() {
+	public long getVolume() {
 		return volume;
 	}
 
-	public void setVolume(int volume) {
+	public void setVolume(long volume) {
 		this.volume = volume;
 	}
 
