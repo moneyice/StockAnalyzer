@@ -46,17 +46,20 @@ public class StockInfoSpider {
 		lastDay.setTime(dailyinfo.get(dailyinfo.size()-1).getTime());
 		
 		Calendar today=Calendar.getInstance();
-		
-		lastDay.get(Calendar.YEAR);
-		
+		int todayHour=today.get(Calendar.HOUR_OF_DAY);
 //		每天18:00 以前，最新数据是昨天的， 每天18:00 以后，最新数据是今天的，就什么都不做。
 //		否则更新数据
+		if(todayHour<18){
+			today.add(Calendar.DAY_OF_YEAR, -1);
+		}
+		else{
+			
+		}
+		int lastDayTime=lastDay.get(Calendar.YEAR)*10000+lastDay.get(Calendar.MONTH)+lastDay.get(Calendar.DAY_OF_MONTH);
+		int wantedTime=today.get(Calendar.YEAR)*10000+today.get(Calendar.MONTH)+today.get(Calendar.DAY_OF_MONTH);
 		
 		
-		
-		
-		
-		return false;
+		return lastDayTime!=wantedTime;
 	}
 
 	public static void main(String[] args) {
