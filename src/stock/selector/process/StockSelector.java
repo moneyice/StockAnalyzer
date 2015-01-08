@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Properties;
 
+import stock.selector.dao.IStockDAO;
+import stock.selector.dao.StockDAO4FileSystem;
 import stock.selector.process.io.ConsoleResultWriter;
 import stock.selector.process.io.HtmlFileResultWriter;
 import stock.selector.process.io.IResultWriter;
@@ -31,6 +33,8 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
+		IStockDAO stockDAO=new StockDAO4FileSystem(getString("stock.data.folder"));
+		hs.setStockDAO(stockDAO);
 
 		analyzer.setResultwriter(writer);
 
@@ -45,6 +49,8 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
+		IStockDAO stockDAO=new StockDAO4FileSystem(getString("stock.data.folder"));
+		hs.setStockDAO(stockDAO);
 		analyzer.setResultwriter(writer);
 
 		hs.addAnalyzer(analyzer);
@@ -74,6 +80,10 @@ public class StockSelector {
 
 	public double getDouble(String key) {
 		return Double.parseDouble(props.getProperty(key));
+	}
+	
+	public String getString(String key){
+		return props.getProperty(key);
 	}
 
 }

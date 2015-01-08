@@ -14,7 +14,16 @@ import stock.selector.model.Stock;
 
 public class HistoryDataService {
 	List<IStockAnalyzer> analyzers = new ArrayList<IStockAnalyzer>();
-	IStockDAO stockDAO = new StockDAO4Aerospike();
+	IStockDAO stockDAO = null;
+	
+
+	public IStockDAO getStockDAO() {
+		return stockDAO;
+	}
+
+	public void setStockDAO(IStockDAO stockDAO) {
+		this.stockDAO = stockDAO;
+	}
 
 	public void addAnalyzer(IStockAnalyzer analyzer) {
 		analyzers.add(analyzer);

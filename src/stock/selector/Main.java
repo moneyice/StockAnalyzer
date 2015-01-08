@@ -14,7 +14,7 @@ public class Main {
 			selector.runYOMAnalyzer();
 			
 			//Demark选股
-//			selector.runDemarkAnalyzer();
+			//selector.runDemarkAnalyzer();
 
 		} catch (Exception e) {
 			e.printStackTrace();
