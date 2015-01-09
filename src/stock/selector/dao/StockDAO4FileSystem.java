@@ -116,4 +116,14 @@ public class StockDAO4FileSystem implements IStockDAO {
 		return list;
 	}
 
+	@Override
+	public Date getStockUpdateTime(String code) {
+		return null;
+	}
+
+	@Override
+	public Date getAllSymbolsUpdateTime() {
+		return null;
+	}
+
 }

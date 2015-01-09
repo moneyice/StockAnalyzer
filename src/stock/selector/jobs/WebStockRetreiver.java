@@ -32,7 +32,7 @@ import com.aerospike.client.policy.WritePolicy;
 import com.alibaba.fastjson.JSON;
 import com.nhefner.main.StockFetcher;
 
-public class WebStockRetreiver implements IStockRetreiver {
+public abstract class WebStockRetreiver implements IStockRetreiver {
 	String codeListHTML = "http://quote.eastmoney.com/stocklist.html";
 
 	@Override
@@ -56,67 +56,6 @@ public class WebStockRetreiver implements IStockRetreiver {
 			list.add(stock);
 		}
 		return list;
-	}
-
-	public Stock getStockInfo(Stock stock) throws IOException {
-		String symbol = stock.getMarket() + stock.getCode();
-		String url = "http://xueqiu.com/S/#{symbol}/historical.csv";
-		url = url.replace("#{symbol}", symbol);
-		BufferedReader br = null;
-		InputStreamReader is = null;
-		try {
-			// Retrieve CSV File
-			URL xueqiuurl = new URL(url);
-			URLConnection connection = xueqiuurl.openConnection();
-			is = new InputStreamReader(connection.getInputStream());
-			br = new BufferedReader(is);
-			// pass the first head line
-			// symbol, date, open, high, low, close, volume
-			// SH600340 2003-12-30 12:00 AM 8.7 9.16 8.68 8.92 16666958
-			String line = br.readLine();
-			// Parse CSV Into Array
-			while ((line = br.readLine()) != null) {
-				line = line.replaceAll("\"", "");
-				String[] result = line.split(",");
-				DailyInfo daily = new DailyInfo();
-				double open = Utils.handleDouble(result[2]);
-				double high = Utils.handleDouble(result[3]);
-				double low = Utils.handleDouble(result[4]);
-				double close = Utils.handleDouble(result[5]);
-				long volume = Utils.handleLong(result[6]);
-				Date date = null;
-				try {
-					date = Utils.parseDate(result[1]);
-				} catch (Exception e) {
-					throw new RuntimeException("process " + symbol
-							+ " error, wrong data format " + result[0]);
-				}
-				daily.setOpen(open);
-				daily.setHigh(high);
-				daily.setLow(low);
-				daily.setClose(close);
-				daily.setTime(date);
-				daily.setVolume(volume);
-				// by asc order
-				stock.getDailyinfo().add(daily);
-			}
-		} catch (IOException e) {
-			Logger log = Logger.getLogger(StockFetcher.class.getName());
-			log.log(Level.SEVERE, e.toString() + "  " + symbol);
-			throw e;
-		} finally {
-			if (is != null) {
-				is.close();
-			}
-		}
-		return stock;
-	}
-
-	public static void main(String[] args) throws IOException {
-		WebStockRetreiver scr = new WebStockRetreiver();
-		// scr.run();
-		// scr.store();
-		// scr.getAllSymbols();
 	}
 
 	// public void startAnalyzeFromYahoo() {
