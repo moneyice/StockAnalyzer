@@ -6,13 +6,14 @@ import java.util.Date;
 import java.util.List;
 
 import stock.selector.dao.IStockDAO;
-import stock.selector.dao.StockDAO4Aerospike;
+import stock.selector.dao.StockDAO4FileSystem;
 import stock.selector.model.Stock;
 
 public class StockInfoSpider {
 
-	private static final int MAX = 200;
-	IStockDAO dao = new StockDAO4Aerospike();
+	private static final int MAX = 20000;
+	//IStockDAO dao = new StockDAO4Aerospike();
+	IStockDAO dao = new StockDAO4FileSystem("/Users/moneyice/code/stock-cache/");
 	IStockRetreiver stockRetreiver = new NeteaseWebStockRetreiver();
 
 	public void run() {
@@ -89,16 +90,18 @@ public class StockInfoSpider {
 
 	public void testPerf() {
 		List<Stock> stockSymbols = dao.getAllSymbols();
-
+		long start=System.currentTimeMillis();
+		System.out.println(stockSymbols.size());
 		for (Stock stock : stockSymbols) {
 			String code = stock.getCode();
 			if (code.startsWith("0") || code.startsWith("3")
 					|| code.startsWith("6")) {
 
 				Stock t = dao.getStock(stock.getCode());
-				System.out.println(t);
+				
 			}
 		}
+		System.out.println((System.currentTimeMillis()-start)/1000);
 	}
 
 	public static void main(String[] args) {

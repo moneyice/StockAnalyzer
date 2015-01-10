@@ -33,7 +33,7 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		IStockDAO stockDAO=new StockDAO4FileSystem(getString("stock.data.folder"));
+		IStockDAO stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
 		hs.setStockDAO(stockDAO);
 
 		analyzer.setResultwriter(writer);

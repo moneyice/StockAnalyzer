@@ -1,8 +1,11 @@
 package com.nhefner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
+
+import com.google.common.io.Resources;
 
 public class Account {
 
@@ -35,6 +38,11 @@ public class Account {
 
 	public int getBalance() {
 		return balance;
+	}
+	
+	public static void main(String[] args) throws MalformedURLException, IOException {
+		String s=Resources.toString(new URL("http://www.baidu.com"), Charset.defaultCharset());
+		System.out.println(s);
 	}
 }
 

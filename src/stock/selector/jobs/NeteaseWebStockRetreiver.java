@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +15,8 @@ import stock.selector.model.DailyInfo;
 import stock.selector.model.Stock;
 import stock.selector.util.Utils;
 
+import com.google.common.base.Splitter;
+import com.google.common.io.Resources;
 import com.nhefner.main.StockFetcher;
 
 public class NeteaseWebStockRetreiver extends WebStockRetreiver {
@@ -27,23 +31,20 @@ public class NeteaseWebStockRetreiver extends WebStockRetreiver {
 		}
 		
 		String url = URL.replace("#{symbol}", symbol);
-		BufferedReader br = null;
-		InputStreamReader is = null;
 		try {
 			// Retrieve CSV File
 			URL neteaseUrl = new URL(url);
-			URLConnection connection = neteaseUrl.openConnection();
-			is = new InputStreamReader(connection.getInputStream());
-			br = new BufferedReader(is);
+			List<String> list=Resources.readLines(neteaseUrl, Charset.forName("UTF-8"));
 			// pass the first head line
 			//日期	股票代码	名称	开盘价	最高价	最低价	收盘价	成交量
 			// 2015-1-8	'600000	浦发银行	15.87	15.88	15.2	15.25	330627172
-			String line = br.readLine();
-			// Parse CSV Into Array
-			while ((line = br.readLine()) != null) {
+			// the date of netease money is desc
+			// First line is header, pass it.
+			for (int i =list.size()-1; i >0; i--) {
 				DailyInfo daily = new DailyInfo();
+				String line=null;
 				try {
-					line = line.replaceAll("\"", "");
+					line = list.get(i).replaceAll("\"", "");
 					String[] result = line.split(",");
 					double open = Utils.handleDouble(result[3]);
 					if (open < 0.01) {
@@ -61,21 +62,19 @@ public class NeteaseWebStockRetreiver extends WebStockRetreiver {
 					daily.setTime(date);
 					daily.setVolume(volume);
 				} catch (Exception e) {
-					System.out.println("163 process error " + line);
+					e.printStackTrace();
 					throw new RuntimeException("163 process error " + line);
 				}
 				// by asc order
 				stock.getDailyinfo().add(daily);
 			}
+			
+			
 		} catch (IOException e) {
 			Logger log = Logger.getLogger(StockFetcher.class.getName());
 			log.log(Level.SEVERE, e.toString() + "  " + symbol);
 			throw e;
-		} finally {
-			if (is != null) {
-				is.close();
-			}
-		}
+		} 
 		return stock;
 	}
 
