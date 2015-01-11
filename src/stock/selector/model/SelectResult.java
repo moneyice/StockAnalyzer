@@ -3,9 +3,7 @@ package stock.selector.model;
 public class SelectResult {
 	Stock stock;
 
-	DailyInfo from;
-	DailyInfo to;
-	DailyInfo now;
+	String msg;
 
 	public Stock getStock() {
 		return stock;
@@ -15,28 +13,13 @@ public class SelectResult {
 		this.stock = stock;
 	}
 
-	public DailyInfo getFrom() {
-		return from;
+	public String getMsg() {
+		return msg;
 	}
 
-	public void setFrom(DailyInfo from) {
-		this.from = from;
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
-
-	public DailyInfo getTo() {
-		return to;
-	}
-
-	public void setTo(DailyInfo to) {
-		this.to = to;
-	}
-
-	public DailyInfo getNow() {
-		return now;
-	}
-
-	public void setNow(DailyInfo now) {
-		this.now = now;
-	}
+	
 
 }

@@ -26,23 +26,7 @@ public class HtmlFileResultWriter extends FileResultWriter {
 			sb.append("</td>");
 			
 			sb.append("<td>");
-			sb.append(result.getFrom().getClose()).append("(").append(Utils.format(result.getFrom().getTime())).append(")");
-			sb.append("</td>");
-			
-			sb.append("<td>");
-			sb.append(result.getTo().getClose()).append("(").append(Utils.format(result.getTo().getTime())).append(")");
-			sb.append("</td>");
-			
-			sb.append("<td>");
-			sb.append(
-					"涨幅："
-							+ (result.getTo().getClose() - result.getFrom()
-									.getClose()) / result.getFrom().getClose()
-							* 100);
-			sb.append("</td>");
-			
-			sb.append("<td>");
-			sb.append("现价: ").append(result.getNow());
+			sb.append(result.getMsg());
 			sb.append("</td></tr>");
 			write(sb.toString());
 		}

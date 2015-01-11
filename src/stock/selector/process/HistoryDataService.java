@@ -99,6 +99,9 @@ public class HistoryDataService {
 				}
 			}
 		}
+		for (IStockAnalyzer analyzer : analyzers) {
+			analyzer.outPutResults();
+		}
 	}
 
 	public List<Stock> getAllSymbols() {

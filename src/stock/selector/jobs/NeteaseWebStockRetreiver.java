@@ -1,10 +1,7 @@
 package stock.selector.jobs;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +12,6 @@ import stock.selector.model.DailyInfo;
 import stock.selector.model.Stock;
 import stock.selector.util.Utils;
 
-import com.google.common.base.Splitter;
 import com.google.common.io.Resources;
 import com.nhefner.main.StockFetcher;
 
@@ -79,14 +75,16 @@ public class NeteaseWebStockRetreiver extends WebStockRetreiver {
 	}
 
 	public static void main(String[] args) throws IOException {
-		NeteaseWebStockRetreiver scr = new NeteaseWebStockRetreiver();
-		Stock t = new Stock();
-		t.setCode("600000");
-		t.setMarket("SH");
-		Stock list = scr.getStockInfo(t);
-		System.out.println(list);
+//		NeteaseWebStockRetreiver scr = new NeteaseWebStockRetreiver();
+//		Stock t = new Stock();
+//		t.setCode("600000");
+//		t.setMarket("SH");
+//		Stock list = scr.getStockInfo(t);
+//		System.out.println(list);
 		// scr.run();
 		// scr.store();
 		// scr.getAllSymbols();
+		Logger log = Logger.getLogger(StockFetcher.class.getName());
+		log.log(Level.WARNING, "test");
 	}
 }

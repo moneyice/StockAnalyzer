@@ -12,4 +12,6 @@ public interface IStockAnalyzer {
 	public void setResultwriter(IResultWriter resultwriter);
 	
 	public IResultWriter getResultwriter();
+	
+	public void outPutResults();
 }

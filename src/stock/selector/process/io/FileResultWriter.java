@@ -25,7 +25,6 @@ public class FileResultWriter implements IResultWriter {
 
 	@Override
 	public void end() {
-		
-		
+		pw.close();
 	}
 }

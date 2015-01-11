@@ -1,13 +1,12 @@
 package stock.selector.process;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import stock.selector.model.DailyInfo;
 import stock.selector.model.SelectResult;
 import stock.selector.model.Stock;
-import stock.selector.process.formater.YesterdayOnceMoreFormater;
-import stock.selector.process.io.IResultWriter;
+import stock.selector.process.io.HtmlFileResultWriter;
+import stock.selector.util.Utils;
 
 public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 
@@ -22,12 +21,10 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 	double closeRangeDown = -0.5;
 
 	public YesterdayOnceMoreAnalyzer() {
-		setFormater(new YesterdayOnceMoreFormater());
 	}
 
 	@Override
 	public void analyze(Stock stock) {
-		results.clear();
 		setStock(stock);
 
 		if (daysToNow <= rangeDays) {
@@ -58,20 +55,47 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 			if (condition1 && condition2) {
 				SelectResult result = new SelectResult();
 				result.setStock(stock);
-				result.setFrom(from);
-				result.setTo(end);
-				result.setNow(current);
+				String msg=format(stock,from,end,current);
+				result.setMsg(msg);
 				results.add(result);
 				break;
 			}
 		}
-
-		String data = getFormater().format(results, stock);
-		if (data != null) {
-			getResultwriter().write(data);
-		}
 	}
 
+	public void outPutResults(){
+		HtmlFileResultWriter htmlWriter=(HtmlFileResultWriter)getResultwriter();
+		htmlWriter.wr
+		for (SelectResult selectResult : results) {
+			getResultwriter().write(selectResult.getStock()+ " "+selectResult.getStock().getName() + "  "+selectResult.getMsg());
+		}
+		getResultwriter().end();
+		
+	}
+	
+	public String format(Stock stock, DailyInfo from, DailyInfo end, DailyInfo now ) {
+		if (results == null || results.isEmpty()) {
+			return null;
+		}
+		SelectResult result = results.get(0);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(result.getStock().getCode()).append("  ")
+				.append(result.getStock().getName()).append("\n");
+		sb.append(Utils.format(from.getTime())).append("  ")
+				.append(from.getClose()).append("  --->   ");
+		sb.append(Utils.format(end.getTime())).append("  ")
+				.append(end.getClose());
+		sb.append("\n");
+		sb.append(
+				"涨幅："
+						+ (end.getClose() - from
+								.getClose()) / from.getClose()
+						* 100).append("%\n");
+		sb.append("现价: ").append(now.getClose()).append("\n\r");
+		return (sb.toString());
+	}
+	
 	public String getDescription() {
 		return "只考虑" + daysToNow + "天内的股票，曾经在" + rangeDays + "天内涨幅超过"
 				+ (range * 100) + "%，现值比前期低点涨幅大于 " + (closeRangeDown * 100)
