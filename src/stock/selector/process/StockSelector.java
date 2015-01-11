@@ -55,7 +55,7 @@ public class StockSelector {
 
 		hs.addAnalyzer(analyzer);
 
-		// hs.startAnalyzeFromYahoo();
+//		 hs.startAnalyzeFromYahoo();
 		hs.startAnalyze();
 	}
 
@@ -69,7 +69,7 @@ public class StockSelector {
 		IResultWriter writer = new HtmlFileResultWriter(
 				new File(root, filename));
 
-//		writer = new ConsoleResultWriter();
+		writer = new ConsoleResultWriter();
 
 		return writer;
 	}

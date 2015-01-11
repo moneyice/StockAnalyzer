@@ -64,8 +64,6 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 	}
 
 	public void outPutResults(){
-		HtmlFileResultWriter htmlWriter=(HtmlFileResultWriter)getResultwriter();
-		htmlWriter.wr
 		for (SelectResult selectResult : results) {
 			getResultwriter().write(selectResult.getStock()+ " "+selectResult.getStock().getName() + "  "+selectResult.getMsg());
 		}

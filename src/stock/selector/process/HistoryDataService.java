@@ -31,8 +31,8 @@ public class HistoryDataService {
 
 	public void startAnalyze() {
 		long mark = System.currentTimeMillis();
-		// startAnalyzeInSequence();
-		startAnalyzeInParallel();
+		startAnalyzeInSequence();
+//		startAnalyzeInParallel();
 
 		long now = System.currentTimeMillis();
 		System.out.println("collapse " + ((now - mark) / 1000) + " seconds.");
@@ -78,6 +78,9 @@ public class HistoryDataService {
 			es.awaitTermination(60, TimeUnit.MINUTES);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+		for (IStockAnalyzer analyzer : analyzers) {
+			analyzer.outPutResults();
 		}
 	}
 
