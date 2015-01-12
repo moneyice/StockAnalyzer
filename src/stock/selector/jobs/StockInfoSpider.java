@@ -16,6 +16,11 @@ public class StockInfoSpider {
 	IStockDAO dao = new StockDAO4FileSystem("/Users/moneyice/code/stock-cache/");
 	IStockRetreiver stockRetreiver = new NeteaseWebStockRetreiver();
 
+	public StockInfoSpider(){
+		dao = new StockDAO4FileSystem("/Users/moneyice/code/stock-cache/");
+		stockRetreiver = new LocalStockRetreiver("/Users/moneyice/code/stocks");
+	}
+	
 	public void run() {
 		try {
 			Date lastUpdateTime = dao.getAllSymbolsUpdateTime();

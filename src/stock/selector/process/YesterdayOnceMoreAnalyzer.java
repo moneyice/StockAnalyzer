@@ -25,7 +25,7 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 
 	@Override
 	public void analyze(Stock stock) {
-		setStock(stock);
+		//setStock(stock);
 
 		if (daysToNow <= rangeDays) {
 			throw new RuntimeException("考察天数要大于涨幅天数");
@@ -65,21 +65,16 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 
 	public void outPutResults(){
 		for (SelectResult selectResult : results) {
-			getResultwriter().write(selectResult.getStock()+ " "+selectResult.getStock().getName() + "  "+selectResult.getMsg());
+			getResultwriter().write(selectResult.getMsg());
 		}
 		getResultwriter().end();
 		
 	}
 	
 	public String format(Stock stock, DailyInfo from, DailyInfo end, DailyInfo now ) {
-		if (results == null || results.isEmpty()) {
-			return null;
-		}
-		SelectResult result = results.get(0);
-
 		StringBuilder sb = new StringBuilder();
-		sb.append(result.getStock().getCode()).append("  ")
-				.append(result.getStock().getName()).append("\n");
+		sb.append(stock.getCode()).append("  ")
+				.append(stock.getName()).append("\n");
 		sb.append(Utils.format(from.getTime())).append("  ")
 				.append(from.getClose()).append("  --->   ");
 		sb.append(Utils.format(end.getTime())).append("  ")
