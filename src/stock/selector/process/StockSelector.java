@@ -71,6 +71,19 @@ public class StockSelector {
 		hs.addAnalyzer(analyzer);
 		hs.startAnalyze();
 	}
+	
+	public void runSuddentIncreaseAnalyzer() throws IOException {
+		AbstractStockAnalyzer analyzer = new SuddentIncreaseAnalyzer();
+		IResultWriter writer = getResultWriter();
+
+		HistoryDataService hs = new HistoryDataService();
+		IStockDAO stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
+		hs.setStockDAO(stockDAO);
+		analyzer.setResultwriter(writer);
+
+		hs.addAnalyzer(analyzer);
+		hs.startAnalyze();
+	}
 
 	public IResultWriter getResultWriter() throws IOException {
 		Calendar cal = Calendar.getInstance();
