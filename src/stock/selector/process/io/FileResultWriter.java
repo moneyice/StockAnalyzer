@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import stock.selector.model.SelectResult;
-import stock.selector.util.Utils;
 
 public class FileResultWriter implements IResultWriter {
 	PrintWriter pw =null;
@@ -26,5 +26,13 @@ public class FileResultWriter implements IResultWriter {
 	@Override
 	public void end() {
 		pw.close();
+	}
+
+	@Override
+	public void write(List<SelectResult> list) {
+		for (SelectResult selectResult : list) {
+			write(selectResult.getMsg());
+		}
+		
 	}
 }

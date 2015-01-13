@@ -68,9 +68,7 @@ public class StockSelector {
 		File root = new File("result");
 		IResultWriter writer = new HtmlFileResultWriter(
 				new File(root, filename));
-
-		writer = new ConsoleResultWriter();
-
+		//writer = new ConsoleResultWriter();
 		return writer;
 	}
 

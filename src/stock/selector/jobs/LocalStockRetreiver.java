@@ -16,7 +16,7 @@ import stock.selector.model.Stock;
 import stock.selector.util.Utils;
 
 public class LocalStockRetreiver implements IStockRetreiver {
-	private String root;
+	private String root;  
 
 	public LocalStockRetreiver(String root) {
 		this.root = root;
