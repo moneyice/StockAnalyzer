@@ -49,13 +49,26 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		IStockDAO stockDAO=new StockDAO4FileSystem(getString("stock.data.folder"));
+		IStockDAO stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
 		hs.setStockDAO(stockDAO);
 		analyzer.setResultwriter(writer);
 
 		hs.addAnalyzer(analyzer);
 
 //		 hs.startAnalyzeFromYahoo();
+		hs.startAnalyze();
+	}
+	
+	public void runSuddentLowVolumeAnalyzer() throws IOException {
+		AbstractStockAnalyzer analyzer = new SuddentLowVolumeAnalyzer();
+		IResultWriter writer = getResultWriter();
+
+		HistoryDataService hs = new HistoryDataService();
+		IStockDAO stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
+		hs.setStockDAO(stockDAO);
+		analyzer.setResultwriter(writer);
+
+		hs.addAnalyzer(analyzer);
 		hs.startAnalyze();
 	}
 
@@ -68,7 +81,7 @@ public class StockSelector {
 		File root = new File("result");
 		IResultWriter writer = new HtmlFileResultWriter(
 				new File(root, filename));
-		//writer = new ConsoleResultWriter();
+		writer = new ConsoleResultWriter();
 		return writer;
 	}
 
