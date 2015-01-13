@@ -79,9 +79,15 @@ public class StockDAO4FileSystem implements IStockDAO {
 	}
 	
 	public static void main(String[] args) {
-		Date d=new Date();
-		d.setTime(1420732800000l);
-		System.out.println(d);
+		IStockDAO dao = new StockDAO4FileSystem("/Users/moneyice/code/stock-cache/");
+		List<Stock> list=dao.getAllSymbols();
+		
+		for (Stock stock : list) {
+			long start=System.currentTimeMillis();
+			stock=dao.getStock(stock.getCode());
+			long end=System.currentTimeMillis();
+			System.out.println("cost " + (end - start));
+		}
 	}
 	
 
