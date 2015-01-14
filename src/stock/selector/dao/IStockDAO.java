@@ -14,4 +14,9 @@ public interface IStockDAO {
 
 	public List<Stock> getAllSymbols();
 	public Date getAllSymbolsUpdateTime();
+	
+	
+	
+	
+	
 }
