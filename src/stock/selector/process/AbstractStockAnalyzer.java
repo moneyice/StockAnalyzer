@@ -38,4 +38,7 @@ public abstract class AbstractStockAnalyzer implements IStockAnalyzer{
 	public void setResultwriter(IResultWriter resultwriter) {
 		this.resultwriter = resultwriter;
 	}
+	public void outPutResults(){
+		getResultwriter().write(results);
+}
 }
