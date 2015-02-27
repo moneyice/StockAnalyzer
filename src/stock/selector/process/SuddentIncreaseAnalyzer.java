@@ -18,7 +18,7 @@ public class SuddentIncreaseAnalyzer extends AbstractStockAnalyzer {
 	double increase=9;
 	
 	//decrease now
-	double decrease=-8;
+	double decrease=-3.5;
 	
 	public SuddentIncreaseAnalyzer() {
 	}
@@ -75,7 +75,7 @@ public class SuddentIncreaseAnalyzer extends AbstractStockAnalyzer {
 	}
 	
 	public String getDescription() {
-		return daysToNow+"天之内有近似涨停，目前跌幅在 "+decrease ;
+		return daysToNow+"天之内有近似涨停，目前跌幅大于 "+decrease + "% \n\r" ;
 	}
 
 	public int getDaysToNow() {
