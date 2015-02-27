@@ -8,18 +8,22 @@ import java.util.Calendar;
 import java.util.Properties;
 
 import stock.selector.dao.IStockDAO;
+import stock.selector.dao.StockDAO4Aerospike;
 import stock.selector.dao.StockDAO4FileSystem;
 import stock.selector.process.io.ConsoleResultWriter;
 import stock.selector.process.io.HtmlFileResultWriter;
 import stock.selector.process.io.IResultWriter;
 
 public class StockSelector {
-
+	
 	Properties props = null;
+	private IStockDAO stockDAO;
 
 	public StockSelector() throws FileNotFoundException, IOException {
 		props = new Properties();
 		props.load(new FileReader("analyzer.properties"));
+		stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
+		stockDAO=new StockDAO4Aerospike();
 	}
 
 	public void runYOMAnalyzer() throws IOException {
@@ -33,7 +37,7 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		IStockDAO stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
+		
 		hs.setStockDAO(stockDAO);
 
 		analyzer.setResultwriter(writer);
@@ -49,7 +53,6 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		IStockDAO stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
 		hs.setStockDAO(stockDAO);
 		analyzer.setResultwriter(writer);
 
@@ -64,7 +67,6 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		IStockDAO stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
 		hs.setStockDAO(stockDAO);
 		analyzer.setResultwriter(writer);
 
@@ -77,7 +79,6 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		IStockDAO stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
 		hs.setStockDAO(stockDAO);
 		analyzer.setResultwriter(writer);
 
