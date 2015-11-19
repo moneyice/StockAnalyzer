@@ -1,36 +1,15 @@
 package stock.selector.jobs;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import stock.selector.model.DailyInfo;
 import stock.selector.model.Stock;
-import stock.selector.process.IStockAnalyzer;
-import stock.selector.util.Utils;
-
-import com.aerospike.client.AerospikeClient;
-import com.aerospike.client.Bin;
-import com.aerospike.client.Key;
-import com.aerospike.client.Record;
-import com.aerospike.client.policy.ClientPolicy;
-import com.aerospike.client.policy.RecordExistsAction;
-import com.aerospike.client.policy.WritePolicy;
-import com.alibaba.fastjson.JSON;
-import com.nhefner.main.StockFetcher;
 
 public abstract class WebStockRetreiver implements IStockRetreiver {
 	String codeListHTML = "http://quote.eastmoney.com/stocklist.html";

@@ -13,8 +13,6 @@ import stock.selector.model.DailyInfo;
 import stock.selector.model.Stock;
 import stock.selector.util.Utils;
 
-import com.nhefner.main.StockFetcher;
-
 public class XueqiuWebStockRetreiver extends WebStockRetreiver {
 	String codeListHTML = "http://quote.eastmoney.com/stocklist.html";
 
@@ -63,7 +61,7 @@ public class XueqiuWebStockRetreiver extends WebStockRetreiver {
 				stock.getDailyinfo().add(daily);
 			}
 		} catch (IOException e) {
-			Logger log = Logger.getLogger(StockFetcher.class.getName());
+			Logger log = Logger.getLogger("sa");
 			log.log(Level.SEVERE, e.toString() + "  " + symbol);
 			throw e;
 		} finally {
