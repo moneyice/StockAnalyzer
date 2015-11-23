@@ -23,7 +23,6 @@ public class SuddentIncreaseAnalyzer extends AbstractStockAnalyzer {
 	public SuddentIncreaseAnalyzer() {
 	}
 
-	@Override
 	public void analyze(Stock stock) {
 		//setStock(stock);
 		List<DailyInfo> infos = stock.getDailyinfo();

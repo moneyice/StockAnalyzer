@@ -19,7 +19,6 @@ public class SuddentLowVolumeAnalyzer extends AbstractStockAnalyzer {
 	public SuddentLowVolumeAnalyzer() {
 	}
 
-	@Override
 	public void analyze(Stock stock) {
 		//setStock(stock);
 		List<DailyInfo> infos = stock.getDailyinfo();

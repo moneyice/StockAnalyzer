@@ -29,7 +29,6 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 	public DemarkAnalyzer() {
 	}
 
-	@Override
 	public void analyze(Stock stock) {
 		setupReady = false;
 		selectList = new ArrayList<DemarkSelect>();

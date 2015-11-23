@@ -18,17 +18,14 @@ public class FileResultWriter implements IResultWriter {
 		 pw = new PrintWriter(new FileWriter(file,true),true);
 	}
 
-	@Override
 	public void write(String content) {
 		pw.println(content);
 	}
 
-	@Override
 	public void end() {
 		pw.close();
 	}
 
-	@Override
 	public void write(List<SelectResult> list) {
 		for (SelectResult selectResult : list) {
 			write(selectResult.getMsg());

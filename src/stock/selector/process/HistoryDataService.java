@@ -45,7 +45,6 @@ public class HistoryDataService {
 			this.code = code;
 		}
 
-		@Override
 		public void run() {
 			Stock stock = null;
 			try {

@@ -23,7 +23,6 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 	public YesterdayOnceMoreAnalyzer() {
 	}
 
-	@Override
 	public void analyze(Stock stock) {
 		//setStock(stock);
 

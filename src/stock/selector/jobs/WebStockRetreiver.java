@@ -14,7 +14,6 @@ import stock.selector.model.Stock;
 public abstract class WebStockRetreiver implements IStockRetreiver {
 	String codeListHTML = "http://quote.eastmoney.com/stocklist.html";
 
-	@Override
 	public List<Stock> getAllStockSymbols() throws IOException {
 		List<Stock> list = new ArrayList<Stock>();
 		Document doc = Jsoup.connect(codeListHTML).get();
