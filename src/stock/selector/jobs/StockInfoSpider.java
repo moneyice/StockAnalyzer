@@ -93,21 +93,6 @@ public class StockInfoSpider {
 		return lastDayTime < wantedTime;
 	}
 
-	public void testPerf() {
-		List<Stock> stockSymbols = dao.getAllSymbols();
-		long start = System.currentTimeMillis();
-		System.out.println(stockSymbols.size());
-		for (Stock stock : stockSymbols) {
-			String code = stock.getCode();
-			if (code.startsWith("0") || code.startsWith("3") || code.startsWith("6")) {
-
-				Stock t = dao.getStock(stock.getCode());
-
-			}
-		}
-		System.out.println((System.currentTimeMillis() - start) / 1000);
-	}
-
 	public static void main(String[] args) {
 		StockInfoSpider spider = new StockInfoSpider();
 		spider.run();

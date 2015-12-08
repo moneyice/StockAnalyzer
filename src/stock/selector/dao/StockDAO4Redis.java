@@ -33,10 +33,15 @@ public class StockDAO4Redis implements IStockDAO {
 		map.put(ALL_SYMBOLS, symbols);
 		map.put(UPDATE_TIME, updateTime);
 		jedis.hmset(ALL_SYMBOLS, map);
-		jedis.set(ALL_SYMBOLS, symbols);
 		jedis.close();
 	}
-
+	public List<Stock> getAllSymbols() {
+		Jedis jedis = pool.getResource();
+		String symbols = jedis.hget(ALL_SYMBOLS,ALL_SYMBOLS);
+		List<Stock> stocks = JSON.parseArray(symbols, Stock.class);
+		jedis.close();
+		return stocks;
+	}
 	public void storeStock(Stock stock) {
 		String json = JSON.toJSONString(stock);
 		Jedis jedis = pool.getResource();
@@ -66,13 +71,7 @@ public class StockDAO4Redis implements IStockDAO {
 		return stock;
 	}
 
-	public List<Stock> getAllSymbols() {
-		Jedis jedis = pool.getResource();
-		String symbols = jedis.hget(ALL_SYMBOLS,ALL_SYMBOLS);
-		List<Stock> stocks = JSON.parseArray(symbols, Stock.class);
-		jedis.close();
-		return stocks;
-	}
+	
 
 	public Date getAllSymbolsUpdateTime() {
 		Jedis jedis = pool.getResource();
