@@ -8,8 +8,8 @@ import java.util.Calendar;
 import java.util.Properties;
 
 import stock.selector.dao.IStockDAO;
-import stock.selector.dao.StockDAO4Aerospike;
 import stock.selector.dao.StockDAO4FileSystem;
+import stock.selector.dao.StockDAO4Redis;
 import stock.selector.process.io.ConsoleResultWriter;
 import stock.selector.process.io.HtmlFileResultWriter;
 import stock.selector.process.io.IResultWriter;
@@ -23,7 +23,7 @@ public class StockSelector {
 		props = new Properties();
 		props.load(new FileReader("analyzer.properties"));
 		stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
-		stockDAO=new StockDAO4Aerospike();
+		stockDAO=new StockDAO4Redis();
 	}
 
 	public void runYOMAnalyzer() throws IOException {

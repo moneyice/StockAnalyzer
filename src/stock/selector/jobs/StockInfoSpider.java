@@ -79,9 +79,9 @@ public class StockInfoSpider {
 
 		Calendar today = Calendar.getInstance();
 		int todayHour = today.get(Calendar.HOUR_OF_DAY);
-		// 每天18:00 以前，最新数据是昨天的， 每天18:00 以后，最新数据是今天的，就什么都不做。
+		// 每天16:00 以前，最新数据是昨天的， 每天16:00 以后，最新数据是今天的，就什么都不做。
 		// 否则更新数据
-		if (todayHour < 18) {
+		if (todayHour < 16) {
 			today.add(Calendar.DAY_OF_YEAR, -1);
 		}
 

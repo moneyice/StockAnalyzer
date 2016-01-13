@@ -14,10 +14,10 @@ public class Main {
 			//selector.runYOMAnalyzer();
 			
 			//Demark选股
-			//selector.runDemarkAnalyzer();
+			selector.runDemarkAnalyzer();
 
 			//selector.runSuddentLowVolumeAnalyzer();
-			selector.runSuddentIncreaseAnalyzer();
+			//selector.runSuddentIncreaseAnalyzer();
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
