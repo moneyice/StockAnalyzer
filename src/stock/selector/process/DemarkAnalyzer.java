@@ -1,6 +1,7 @@
 package stock.selector.process;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import stock.selector.model.DailyInfo;
@@ -20,8 +21,8 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 	// 收盘价低于先前第X个T的收盘价
 	int buySetupBeforeDay = 4;
 
-	//demark is 13
-	int countDownNumber=13;
+	// demark is 13
+	int countDownNumber = 13;
 	private boolean setupReady = false;
 
 	private List<DemarkSelect> selectList = null;
@@ -43,8 +44,7 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 		int setupTimes = 0;
 
 		for (int i = infos.size() - daysToNow - 1; i < infos.size(); i++) {
-			if (infos.get(i).getClose() < infos.get(i - buySetupBeforeDay)
-					.getClose()) {
+			if (infos.get(i).getClose() < infos.get(i - buySetupBeforeDay).getClose()) {
 				setupTimes++;
 			} else {
 				if (setupReady) {
@@ -65,14 +65,30 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 		}
 
 		prepareCountDownData();
-		if(selectList.isEmpty()){
+		if (selectList.isEmpty()) {
 			return;
 		}
+
+		filter(selectList);
+
 		SelectResult sr = new SelectResult();
 		sr.setStock(getStock());
 		String msg = format(selectList, getStock());
-		sr.setMsg(msg);
-		results.add(sr);
+		if (msg != null) {
+			sr.setMsg(msg);
+			results.add(sr);
+		}
+
+	}
+
+	private void filter(List<DemarkSelect> selectList2) {
+		for (Iterator iterator = selectList2.iterator(); iterator.hasNext();) {
+			DemarkSelect demarkSelect = (DemarkSelect) iterator.next();
+			if (demarkSelect.getCountDownPoint() == null) {
+				iterator.remove();
+			}
+		}
+
 	}
 
 	private void prepareCountDownData() {
@@ -85,8 +101,7 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 		}
 	}
 
-	private void findCountDownResult(DemarkSelect demarkSelect,
-			List<DailyInfo> infos) {
+	private void findCountDownResult(DemarkSelect demarkSelect, List<DailyInfo> infos) {
 		int index = infos.indexOf(demarkSelect.getSetupPoint());
 		int number = 0;
 		DailyInfo countDownPoint = null;
@@ -103,35 +118,33 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 		// use to field to store the count down point info
 		demarkSelect.setCountDownPoint(countDownPoint);
 	}
-	
+
 	public String getDescription() {
 		return "Demark 指标\n";
 	}
 
 	public String format(List<DemarkSelect> selectList, Stock stock) {
+		if (selectList.isEmpty()) {
+			return null;
+		}
+
 		StringBuilder sb = new StringBuilder();
-		sb.append(stock.getCode()).append("  ").append(stock.getName())
-				.append("\n");
+		sb.append(stock.getCode()).append("  ").append(stock.getName()).append("\n");
 		// 000001 平安银行
 		// 2012-2-12 (9) --- 2012-3-30 (13)
 		// 2013-1-12 (9) --- 2013-2-28 (13)
 		for (int i = 0; i < selectList.size(); i++) {
-			sb.append(Utils.format(selectList.get(i).getSetupPoint().getTime()))
-					.append("(").append(selectList.get(i).getSetupNumber())
-					.append(")  --- ");
+			sb.append(Utils.format(selectList.get(i).getSetupPoint().getTime())).append("(")
+					.append(selectList.get(i).getSetupNumber()).append(")  --- ");
 			if (selectList.get(i).getCountDownPoint() != null) {
-				sb.append(
-						Utils.format(selectList.get(i).getCountDownPoint()
-								.getTime())).append("(")
-						.append(selectList.get(i).getCountDownNumber())
-						.append(") ");
+				sb.append(Utils.format(selectList.get(i).getCountDownPoint().getTime())).append("(")
+						.append(selectList.get(i).getCountDownNumber()).append(") ");
 			}
 			sb.append(" \n");
 		}
 		sb.append("\n");
 		return sb.toString();
 	}
-
 
 	public class DemarkSelect {
 		private int setupNumber = 0;
