@@ -28,26 +28,28 @@ public class StockDAO4Redis implements IStockDAO {
 	public void storeAllSymbols(List<Stock> list) {
 		String symbols = JSON.toJSONString(list);
 		Jedis jedis = pool.getResource();
-		String updateTime=JSON.toJSONString(new Date());
-		Map<String,String> map=new HashMap<String,String>();
+		String updateTime = JSON.toJSONString(new Date());
+		Map<String, String> map = new HashMap<String, String>();
 		map.put(ALL_SYMBOLS, symbols);
 		map.put(UPDATE_TIME, updateTime);
 		jedis.hmset(ALL_SYMBOLS, map);
 		jedis.close();
 	}
+
 	public List<Stock> getAllSymbols() {
 		Jedis jedis = pool.getResource();
-		String symbols = jedis.hget(ALL_SYMBOLS,ALL_SYMBOLS);
+		String symbols = jedis.hget(ALL_SYMBOLS, ALL_SYMBOLS);
 		List<Stock> stocks = JSON.parseArray(symbols, Stock.class);
 		jedis.close();
 		return stocks;
 	}
+
 	public void storeStock(Stock stock) {
 		String json = JSON.toJSONString(stock);
 		Jedis jedis = pool.getResource();
-		String updateTime=JSON.toJSONString(new Date());
-		
-		Map<String,String> map=new HashMap<String,String>();
+		String updateTime = JSON.toJSONString(new Date());
+
+		Map<String, String> map = new HashMap<String, String>();
 		map.put(K, json);
 		map.put(UPDATE_TIME, updateTime);
 		jedis.hmset(stock.getCode(), map);
@@ -56,7 +58,7 @@ public class StockDAO4Redis implements IStockDAO {
 
 	public Date getStockUpdateTime(String code) {
 		Jedis jedis = pool.getResource();
-		String updateTime=jedis.hget(code, UPDATE_TIME);
+		String updateTime = jedis.hget(code, UPDATE_TIME);
 		Date date = JSON.parseObject(updateTime, Date.class);
 		jedis.close();
 		return date;
@@ -64,28 +66,18 @@ public class StockDAO4Redis implements IStockDAO {
 
 	public Stock getStock(String code) {
 		Jedis jedis = pool.getResource();
-		String json = jedis.hget(code,K);
+		String json = jedis.hget(code, K);
 
 		Stock stock = JSON.parseObject(json, Stock.class);
 		jedis.close();
 		return stock;
 	}
 
-	
-
 	public Date getAllSymbolsUpdateTime() {
 		Jedis jedis = pool.getResource();
-		String updateTime = jedis.hget(ALL_SYMBOLS,UPDATE_TIME);
+		String updateTime = jedis.hget(ALL_SYMBOLS, UPDATE_TIME);
 		Date date = JSON.parseObject(updateTime, Date.class);
 		jedis.close();
 		return date;
-	}
-
-	public static void main(String[] args) {
-		JedisPool pool = new JedisPool(HOST, PORT);
-		Jedis jedis = pool.getResource();
-		jedis.hsetnx("bing1", "updatetime", "122343434");
-		jedis.hset("bing1", "code", "333333");
-		jedis.close();
 	}
 }

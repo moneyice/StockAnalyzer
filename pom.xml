@@ -31,7 +31,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>my.package.MyStartClass</mainClass>
+					<mainClass>stock.selector.Application</mainClass>
 					<layout>ZIP</layout>
 				</configuration>
 				<executions>
