@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.stereotype.Component;
+
 import stock.selector.model.DailyInfo;
 import stock.selector.model.Stock;
 import stock.selector.util.Utils;
 
 import com.google.common.io.Resources;
 
+@Component("neteaseWebStockRetreiver")
 public class NeteaseWebStockRetreiver extends WebStockRetreiver {
 	String URL = "http://quotes.money.163.com/service/chddata.html?code=#{symbol}&start=20140101&&fields=TOPEN;HIGH;LOW;TCLOSE;VOTURNOVER";
 

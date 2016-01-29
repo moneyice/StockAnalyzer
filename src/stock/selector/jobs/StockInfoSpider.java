@@ -5,23 +5,28 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+
 import stock.selector.dao.IStockDAO;
 import stock.selector.dao.StockDAO4FileSystem;
 import stock.selector.dao.StockDAO4Redis;
 import stock.selector.model.Stock;
 
+@Component("stockInfoSpider")
 public class StockInfoSpider {
 
 	private static final int MAX = 20000;
 	// IStockDAO dao = new StockDAO4Aerospike();
-	// IStockDAO dao = new
-	// StockDAO4FileSystem("/Users/moneyice/code/stock-cache/");
-	IStockDAO dao = new StockDAO4Redis();
-	private NeteaseWebStockRetreiver stockRetreiver;
-	
+	IStockDAO dao = new StockDAO4FileSystem("C:\\working\\temp\\stocks");
+	// IStockDAO dao = new StockDAO4Redis();
+
+	@Resource(name = "neteaseWebStockRetreiver")
+	private IStockRetreiver stockRetreiver;
 
 	public StockInfoSpider() {
-		 stockRetreiver = new NeteaseWebStockRetreiver();
+
 	}
 
 	public void run() {
@@ -30,7 +35,6 @@ public class StockInfoSpider {
 			if (lastUpdateTime == null || isAllSymbosOutOfDate(lastUpdateTime)) {
 				List<Stock> stockSymbols = stockRetreiver.getAllStockSymbols();
 				dao.storeAllSymbols(stockSymbols);
-
 			}
 
 			List<Stock> stockSymbols = dao.getAllSymbols();
@@ -43,9 +47,11 @@ public class StockInfoSpider {
 				}
 
 				String code = stock.getCode();
-				if (code.startsWith("0") || code.startsWith("3") || code.startsWith("6")) {
+				if (code.startsWith("0") || code.startsWith("3")
+						|| code.startsWith("6")) {
 					lastUpdateTime = dao.getStockUpdateTime(stock.getCode());
-					if (lastUpdateTime == null || isStockOutOfDate(lastUpdateTime)) {
+					if (lastUpdateTime == null
+							|| isStockOutOfDate(lastUpdateTime)) {
 						System.out.println("get " + stock.getCode());
 						Stock info = stockRetreiver.getStockInfo(stock);
 						dao.storeStock(info);
@@ -85,10 +91,11 @@ public class StockInfoSpider {
 			today.add(Calendar.DAY_OF_YEAR, -1);
 		}
 
-		int lastDayTime = lastDay.get(Calendar.YEAR) * 10000 + lastDay.get(Calendar.MONTH)
+		int lastDayTime = lastDay.get(Calendar.YEAR) * 10000
+				+ lastDay.get(Calendar.MONTH)
 				+ lastDay.get(Calendar.DAY_OF_MONTH);
-		int wantedTime = today.get(Calendar.YEAR) * 10000 + today.get(Calendar.MONTH)
-				+ today.get(Calendar.DAY_OF_MONTH);
+		int wantedTime = today.get(Calendar.YEAR) * 10000
+				+ today.get(Calendar.MONTH) + today.get(Calendar.DAY_OF_MONTH);
 
 		return lastDayTime < wantedTime;
 	}

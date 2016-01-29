@@ -47,7 +47,7 @@ public class StockDAO4FileSystem implements IStockDAO {
 			return stock;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("code error"  + code);
+			System.out.println("code error" + code);
 
 		}
 		return null;
@@ -69,24 +69,30 @@ public class StockDAO4FileSystem implements IStockDAO {
 	}
 
 	public Date getStockUpdateTime(String code) {
-		return null;
+		File file = new File(root, code);
+		long time = file.lastModified();
+		Date lastDate = new Date(time);
+		return lastDate;
 	}
 
 	public Date getAllSymbolsUpdateTime() {
-		return null;
+		File file = new File(root, "allSymbols");
+		long time = file.lastModified();
+		Date lastDate = new Date(time);
+		return lastDate;
 	}
-	
+
 	public static void main(String[] args) {
-		IStockDAO dao = new StockDAO4FileSystem("/Users/moneyice/code/stock-cache/");
-		List<Stock> list=dao.getAllSymbols();
-		
+		IStockDAO dao = new StockDAO4FileSystem(
+				"/Users/moneyice/code/stock-cache/");
+		List<Stock> list = dao.getAllSymbols();
+
 		for (Stock stock : list) {
-			long start=System.currentTimeMillis();
-			stock=dao.getStock(stock.getCode());
-			long end=System.currentTimeMillis();
+			long start = System.currentTimeMillis();
+			stock = dao.getStock(stock.getCode());
+			long end = System.currentTimeMillis();
 			System.out.println("cost " + (end - start));
 		}
 	}
-	
 
 }
