@@ -6,13 +6,20 @@ import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import stock.selector.model.Stock;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.io.Files;
 
+@Repository("stockDAO4FileSystem")
 public class StockDAO4FileSystem implements IStockDAO {
 	private String root;
+
+	public StockDAO4FileSystem() {
+
+	}
 
 	public StockDAO4FileSystem(String root) {
 		this.root = root;

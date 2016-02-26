@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Repository;
+
 import com.alibaba.fastjson.JSON;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import stock.selector.model.Stock;
 
+@Repository("stockDAO4Redis")
 public class StockDAO4Redis implements IStockDAO {
 	private static final String K = "k";
 	private static final String UPDATE_TIME = "update_time";
