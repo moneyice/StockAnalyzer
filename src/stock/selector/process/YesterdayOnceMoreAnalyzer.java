@@ -62,9 +62,6 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 		}
 	}
 
-	public void outPutResults(){
-			getResultwriter().write(results);
-	}
 	
 	public String format(Stock stock, DailyInfo from, DailyInfo end, DailyInfo now ) {
 		StringBuilder sb = new StringBuilder();

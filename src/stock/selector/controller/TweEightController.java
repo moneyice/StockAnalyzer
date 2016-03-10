@@ -74,20 +74,4 @@ public class TweEightController {
 		double close = Utils.handleDouble(result[3]);
 		return close;
 	}
-
-	public static void main(String[] args) {
-		try {
-			String url = currentURL.replace("#{symbol}", "0000300");
-			String json = Resources.toString(new URL(url),
-					Charset.forName("UTF-8"));
-			json = json.replaceAll("_ntes_quote_callback\\(", "").replaceAll(
-					"\\);", "");
-
-			System.out.println(json);
-			JSONObject jsonObj = JSON.parseObject(json);
-			System.out.println(jsonObj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

@@ -15,15 +15,13 @@ import stock.selector.process.io.HtmlFileResultWriter;
 import stock.selector.process.io.IResultWriter;
 
 public class StockSelector {
-	
+
 	Properties props = null;
 	private IStockDAO stockDAO;
 
-	public StockSelector() throws FileNotFoundException, IOException {
-		props = new Properties();
-		props.load(new FileReader("analyzer.properties"));
-		stockDAO=new StockDAO4FileSystem(getString("local.data.cache.folder"));
-		stockDAO=new StockDAO4Redis();
+	public StockSelector() {
+		
+
 	}
 
 	public void runYOMAnalyzer() throws IOException {
@@ -37,14 +35,13 @@ public class StockSelector {
 		IResultWriter writer = getResultWriter();
 
 		HistoryDataService hs = new HistoryDataService();
-		
+
 		hs.setStockDAO(stockDAO);
 
 		analyzer.setResultwriter(writer);
 
 		hs.addAnalyzer(analyzer);
 
-		// hs.startAnalyzeFromYahoo();
 		hs.startAnalyze();
 	}
 
@@ -58,10 +55,10 @@ public class StockSelector {
 
 		hs.addAnalyzer(analyzer);
 
-//		 hs.startAnalyzeFromYahoo();
+		// hs.startAnalyzeFromYahoo();
 		hs.startAnalyze();
 	}
-	
+
 	public void runSuddentLowVolumeAnalyzer() throws IOException {
 		AbstractStockAnalyzer analyzer = new SuddentLowVolumeAnalyzer();
 		IResultWriter writer = getResultWriter();
@@ -73,7 +70,7 @@ public class StockSelector {
 		hs.addAnalyzer(analyzer);
 		hs.startAnalyze();
 	}
-	
+
 	public void runSuddentIncreaseAnalyzer() throws IOException {
 		AbstractStockAnalyzer analyzer = new SuddentIncreaseAnalyzer();
 		IResultWriter writer = getResultWriter();
@@ -90,8 +87,8 @@ public class StockSelector {
 		Calendar cal = Calendar.getInstance();
 		String filename = "" + cal.get(Calendar.YEAR) + cal.get(Calendar.MONTH)
 				+ cal.get(Calendar.DAY_OF_MONTH) + "_"
-				+ cal.get(Calendar.HOUR_OF_DAY) + cal.get(Calendar.MINUTE)+cal.get(Calendar.SECOND)
-				+ ".html";
+				+ cal.get(Calendar.HOUR_OF_DAY) + cal.get(Calendar.MINUTE)
+				+ cal.get(Calendar.SECOND) + ".html";
 		File root = new File("result");
 		IResultWriter writer = new HtmlFileResultWriter(
 				new File(root, filename));
@@ -106,8 +103,8 @@ public class StockSelector {
 	public double getDouble(String key) {
 		return Double.parseDouble(props.getProperty(key));
 	}
-	
-	public String getString(String key){
+
+	public String getString(String key) {
 		return props.getProperty(key);
 	}
 

@@ -84,9 +84,9 @@ public class HistoryDataService {
 	}
 
 	public void startAnalyzeInSequence() {
-		for (IStockAnalyzer analyzer : analyzers) {
-			analyzer.getResultwriter().write(analyzer.getDescription());
-		}
+//		for (IStockAnalyzer analyzer : analyzers) {
+//			analyzer.getResultwriter().write(analyzer.getDescription());
+//		}
 
 		List<Stock> allSymbols = stockDAO.getAllSymbols();
 		for (Stock stock : allSymbols) {

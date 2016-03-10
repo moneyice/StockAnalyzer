@@ -54,10 +54,6 @@ public class SuddentIncreaseAnalyzer extends AbstractStockAnalyzer {
 			}
 		}
 	}
-
-	public void outPutResults(){
-			getResultwriter().write(results);
-	}
 	
 	public String format(Stock stock, DailyInfo current, DailyInfo check  ) {
 		StringBuilder sb = new StringBuilder();

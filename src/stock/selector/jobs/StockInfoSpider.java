@@ -18,7 +18,8 @@ import stock.selector.model.Stock;
 public class StockInfoSpider {
 
 	private static final int MAX = 20000;
-	IStockDAO dao = new StockDAO4FileSystem("C:\\working\\temp\\stocks");
+	@Resource(name = "stockDAO4FileSystem")
+	private IStockDAO dao;
 
 	@Resource(name = "neteaseWebStockRetreiver")
 	private IStockRetreiver stockRetreiver;
@@ -90,18 +91,17 @@ public class StockInfoSpider {
 		}
 
 		int lastDayTime = lastDay.get(Calendar.YEAR) * 10000
-				+ lastDay.get(Calendar.MONTH)*100
+				+ lastDay.get(Calendar.MONTH) * 100
 				+ lastDay.get(Calendar.DAY_OF_MONTH);
 		int wantedTime = today.get(Calendar.YEAR) * 10000
-				+ today.get(Calendar.MONTH)*100 + today.get(Calendar.DAY_OF_MONTH);
+				+ today.get(Calendar.MONTH) * 100
+				+ today.get(Calendar.DAY_OF_MONTH);
 
 		return lastDayTime < wantedTime;
 	}
 
 	public static void main(String[] args) {
-		
-		
-		
+
 	}
 
 }

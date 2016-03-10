@@ -6,26 +6,34 @@ import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Repository;
 
+import stock.selector.jobs.StockInfoSpider;
 import stock.selector.model.Stock;
+import stock.selector.util.SystemEnv;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.io.Files;
 
 @Repository("stockDAO4FileSystem")
 public class StockDAO4FileSystem implements IStockDAO {
+	
+	@Resource(name = "systemEnv")
+	SystemEnv systemEnv = null;
+
 	private String root;
 
+	@Resource(name = "stockInfoSpider")
+	private StockInfoSpider stockInfoSpider = null;
+	
 	public StockDAO4FileSystem() {
-
-	}
-
-	public StockDAO4FileSystem(String root) {
-		this.root = root;
+		System.out.println("tet");
 	}
 
 	public void storeAllSymbols(List<Stock> list) {
+		this.root = systemEnv.getString("local.data.cache.folder");
 		String allSymbols = JSON.toJSONString(list);
 		File to = new File(root, "allSymbols");
 		try {
@@ -88,18 +96,4 @@ public class StockDAO4FileSystem implements IStockDAO {
 		Date lastDate = new Date(time);
 		return lastDate;
 	}
-
-	public static void main(String[] args) {
-		IStockDAO dao = new StockDAO4FileSystem(
-				"/Users/moneyice/code/stock-cache/");
-		List<Stock> list = dao.getAllSymbols();
-
-		for (Stock stock : list) {
-			long start = System.currentTimeMillis();
-			stock = dao.getStock(stock.getCode());
-			long end = System.currentTimeMillis();
-			System.out.println("cost " + (end - start));
-		}
-	}
-
 }

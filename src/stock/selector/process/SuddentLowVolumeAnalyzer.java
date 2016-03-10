@@ -55,10 +55,6 @@ public class SuddentLowVolumeAnalyzer extends AbstractStockAnalyzer {
 		}
 	}
 
-	public void outPutResults(){
-			getResultwriter().write(results);
-	}
-	
 	public String format(Stock stock, DailyInfo check ) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(stock.getCode()).append("  ")
