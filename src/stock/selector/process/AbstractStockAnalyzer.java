@@ -3,7 +3,7 @@ package stock.selector.process;
 import java.util.ArrayList;
 import java.util.List;
 
-import stock.selector.model.SelectResult;
+import stock.selector.model.ResultInfo;
 import stock.selector.model.Stock;
 import stock.selector.process.formater.IResultFormater;
 import stock.selector.process.io.IResultWriter;
@@ -13,12 +13,6 @@ public abstract class AbstractStockAnalyzer implements IStockAnalyzer {
 	private Stock stock;
 	private IResultWriter resultwriter;
 	private IResultFormater formater;
-
-	protected List<SelectResult> results = new ArrayList<SelectResult>();
-
-	public List<SelectResult> getResults() {
-		return results;
-	}
 
 	public IResultFormater getFormater() {
 		return formater;
@@ -46,5 +40,9 @@ public abstract class AbstractStockAnalyzer implements IStockAnalyzer {
 
 	public void outPutResults() {
 		// getResultwriter().write(results);
+	}
+	
+	public double getCurrentPrice() {
+		return stock.getDailyinfo().get(stock.getDailyinfo().size()-1).getClose();
 	}
 }

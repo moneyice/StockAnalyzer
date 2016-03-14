@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import stock.selector.model.SelectResult;
+import stock.selector.model.ResultInfo;
 
 public class FileResultWriter implements IResultWriter {
 	PrintWriter pw =null;
@@ -26,8 +26,8 @@ public class FileResultWriter implements IResultWriter {
 		pw.close();
 	}
 
-	public void write(List<SelectResult> list) {
-		for (SelectResult selectResult : list) {
+	public void write(List<ResultInfo> list) {
+		for (ResultInfo selectResult : list) {
 			write(selectResult.getMsg());
 		}
 		

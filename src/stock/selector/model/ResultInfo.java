@@ -1,9 +1,9 @@
 package stock.selector.model;
 
-public class SelectResult {
+public class ResultInfo {
 	Stock stock;
 
-	String msg;
+	String msg = "";
 
 	public Stock getStock() {
 		return stock;
@@ -18,9 +18,7 @@ public class SelectResult {
 		return msg;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void appendMessage(String msg) {
+		this.msg = this.msg + "|" + msg;
 	}
-	
-
 }

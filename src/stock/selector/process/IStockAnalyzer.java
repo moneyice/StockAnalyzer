@@ -2,13 +2,18 @@ package stock.selector.process;
 
 import java.util.List;
 
-import stock.selector.model.SelectResult;
+import stock.selector.model.ResultInfo;
 import stock.selector.model.Stock;
 import stock.selector.process.io.IResultWriter;
 
 public interface IStockAnalyzer {
 
-	public void analyze(Stock stock);
+	/**
+	 * @param ri
+	 * @param stock
+	 * @return selected or not
+	 */
+	public boolean analyze(ResultInfo ri, Stock stock);
 
 	public String getDescription();
 
@@ -17,6 +22,4 @@ public interface IStockAnalyzer {
 	public IResultWriter getResultwriter();
 
 	public void outPutResults();
-
-	public List<SelectResult> getResults();
 }

@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
-import stock.selector.jobs.StockInfoSpider;
 import stock.selector.model.Stock;
 import stock.selector.util.SystemEnv;
 
@@ -19,17 +18,13 @@ import com.google.common.io.Files;
 
 @Repository("stockDAO4FileSystem")
 public class StockDAO4FileSystem implements IStockDAO {
-	
+
 	@Resource(name = "systemEnv")
 	SystemEnv systemEnv = null;
 
 	private String root;
 
-	@Resource(name = "stockInfoSpider")
-	private StockInfoSpider stockInfoSpider = null;
-	
 	public StockDAO4FileSystem() {
-		System.out.println("tet");
 	}
 
 	public void storeAllSymbols(List<Stock> list) {
@@ -91,6 +86,7 @@ public class StockDAO4FileSystem implements IStockDAO {
 	}
 
 	public Date getAllSymbolsUpdateTime() {
+		this.root = systemEnv.getString("local.data.cache.folder");
 		File file = new File(root, "allSymbols");
 		long time = file.lastModified();
 		Date lastDate = new Date(time);

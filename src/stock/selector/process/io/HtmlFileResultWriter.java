@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import stock.selector.model.SelectResult;
+import stock.selector.model.ResultInfo;
 import stock.selector.util.Utils;
 
 public class HtmlFileResultWriter extends FileResultWriter {
@@ -15,14 +15,14 @@ public class HtmlFileResultWriter extends FileResultWriter {
 	}
 
 	@Override
-	public void write(List<SelectResult> list) {
-		for (SelectResult selectResult : list) {
+	public void write(List<ResultInfo> list) {
+		for (ResultInfo selectResult : list) {
 			write(selectResult);
 		}
 		end();
 	}
 	
-	public void write(SelectResult result) {
+	public void write(ResultInfo result) {
 		if (result != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<tr><td>");

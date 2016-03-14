@@ -3,7 +3,7 @@ package stock.selector.process;
 import java.util.List;
 
 import stock.selector.model.DailyInfo;
-import stock.selector.model.SelectResult;
+import stock.selector.model.ResultInfo;
 import stock.selector.model.Stock;
 import stock.selector.process.io.HtmlFileResultWriter;
 import stock.selector.util.Utils;
@@ -23,9 +23,8 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 	public YesterdayOnceMoreAnalyzer() {
 	}
 
-	public void analyze(Stock stock) {
-		//setStock(stock);
-
+	public boolean analyze(ResultInfo resultInfo, Stock stock) {
+		boolean ok = false;
 		if (daysToNow <= rangeDays) {
 			throw new RuntimeException("考察天数要大于涨幅天数");
 		}
@@ -33,7 +32,7 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 		List<DailyInfo> infos = stock.getDailyinfo();
 		if (infos.size() <= daysToNow) {
 			// 元数据天数要求大于考察天数
-			return;
+			return ok;
 		}
 		current = infos.get(infos.size() - 1);
 
@@ -52,35 +51,34 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 			boolean condition2 = r >= closeRangeDown && r <= closeRangeTop;
 
 			if (condition1 && condition2) {
-				SelectResult result = new SelectResult();
+				ResultInfo result = new ResultInfo();
 				result.setStock(stock);
-				String msg=format(stock,from,end,current);
-				result.setMsg(msg);
-				results.add(result);
+				String msg = format(stock, from, end, current);
+				ok = true;
+				resultInfo.appendMessage(msg);
 				break;
 			}
 		}
+		return ok;
 	}
 
-	
-	public String format(Stock stock, DailyInfo from, DailyInfo end, DailyInfo now ) {
+	public String format(Stock stock, DailyInfo from, DailyInfo end,
+			DailyInfo now) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(stock.getCode()).append("  ")
-				.append(stock.getName()).append("\n");
+		sb.append(stock.getCode()).append("  ").append(stock.getName())
+				.append("\n");
 		sb.append(Utils.format(from.getTime())).append("  ")
 				.append(from.getClose()).append("  --->   ");
 		sb.append(Utils.format(end.getTime())).append("  ")
 				.append(end.getClose());
 		sb.append("\n");
 		sb.append(
-				"涨幅："
-						+ (end.getClose() - from
-								.getClose()) / from.getClose()
+				"涨幅：" + (end.getClose() - from.getClose()) / from.getClose()
 						* 100).append("%\n");
 		sb.append("现价: ").append(now.getClose()).append("\n\r");
 		return (sb.toString());
 	}
-	
+
 	public String getDescription() {
 		return "只考虑" + daysToNow + "天内的股票，曾经在" + rangeDays + "天内涨幅超过"
 				+ (range * 100) + "%，现值比前期低点涨幅大于 " + (closeRangeDown * 100)

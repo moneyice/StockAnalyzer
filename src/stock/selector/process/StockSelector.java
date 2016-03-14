@@ -34,7 +34,7 @@ public class StockSelector {
 
 		IResultWriter writer = getResultWriter();
 
-		HistoryDataService hs = new HistoryDataService();
+		StockSelectService hs = new StockSelectService();
 
 		hs.setStockDAO(stockDAO);
 
@@ -49,7 +49,7 @@ public class StockSelector {
 		AbstractStockAnalyzer analyzer = new DemarkAnalyzer();
 		IResultWriter writer = getResultWriter();
 
-		HistoryDataService hs = new HistoryDataService();
+		StockSelectService hs = new StockSelectService();
 		hs.setStockDAO(stockDAO);
 		analyzer.setResultwriter(writer);
 
@@ -63,7 +63,7 @@ public class StockSelector {
 		AbstractStockAnalyzer analyzer = new SuddentLowVolumeAnalyzer();
 		IResultWriter writer = getResultWriter();
 
-		HistoryDataService hs = new HistoryDataService();
+		StockSelectService hs = new StockSelectService();
 		hs.setStockDAO(stockDAO);
 		analyzer.setResultwriter(writer);
 
@@ -75,7 +75,7 @@ public class StockSelector {
 		AbstractStockAnalyzer analyzer = new SuddentIncreaseAnalyzer();
 		IResultWriter writer = getResultWriter();
 
-		HistoryDataService hs = new HistoryDataService();
+		StockSelectService hs = new StockSelectService();
 		hs.setStockDAO(stockDAO);
 		analyzer.setResultwriter(writer);
 

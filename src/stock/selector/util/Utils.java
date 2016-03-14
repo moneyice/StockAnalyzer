@@ -1,6 +1,8 @@
 package stock.selector.util;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,10 +46,6 @@ public class Utils {
 		return SF1.parse(date);
 	}
 
-	public static void main(String[] args) throws ParseException {
-		format("02/02/1998");
-	}
-
 	public static double handleDouble(String x) {
 		Double y;
 		if (Pattern.matches("N/A", x)) {
@@ -76,5 +74,23 @@ public class Utils {
 			y = Long.parseLong(x);
 		}
 		return y;
+	}
+
+	// 保留2位小数
+	public static double get2Double(double a) {
+		DecimalFormat df = new DecimalFormat("0.00");
+		return new Double(df.format(a).toString());
+	}
+
+	public static String double2Percentage(double input) {
+		NumberFormat num = NumberFormat.getPercentInstance();
+		num.setMaximumIntegerDigits(3);
+		num.setMaximumFractionDigits(2);
+		String result = num.format(input);
+		return result;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(double2Percentage(0.2345));
 	}
 }

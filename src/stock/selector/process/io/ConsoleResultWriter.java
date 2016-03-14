@@ -2,7 +2,7 @@ package stock.selector.process.io;
 
 import java.util.List;
 
-import stock.selector.model.SelectResult;
+import stock.selector.model.ResultInfo;
 
 
 public class ConsoleResultWriter implements IResultWriter {
@@ -14,8 +14,8 @@ public class ConsoleResultWriter implements IResultWriter {
 	public void end() {
 	}
 
-	public void write(List<SelectResult> list) {
-		for (SelectResult selectResult : list) {
+	public void write(List<ResultInfo> list) {
+		for (ResultInfo selectResult : list) {
 			write(selectResult.getMsg());
 		}
 		

@@ -1,6 +1,6 @@
 package stock.selector.model;
 
-public class DemarkSelectResult extends SelectResult {
+public class DemarkSelectResult extends ResultInfo {
 	private int setupNumber = 0;
 
 	private int countDownNumber=0;

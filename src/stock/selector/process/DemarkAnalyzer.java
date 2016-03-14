@@ -6,7 +6,7 @@ import java.util.List;
 
 import stock.selector.model.DailyInfo;
 import stock.selector.model.DemarkSelectResult;
-import stock.selector.model.SelectResult;
+import stock.selector.model.ResultInfo;
 import stock.selector.model.Stock;
 import stock.selector.util.Utils;
 
@@ -30,7 +30,8 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 	public DemarkAnalyzer() {
 	}
 
-	public void analyze(Stock stock) {
+	public boolean analyze(ResultInfo resultInfo, Stock stock) {
+		boolean ok = false;
 		setupReady = false;
 		selectList = new ArrayList<DemarkSelect>();
 		setStock(stock);
@@ -38,13 +39,14 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 		List<DailyInfo> infos = stock.getDailyinfo();
 		if (infos.size() <= daysToNow + buySetupBeforeDay) {
 			// 元数据天数要求大于考察天数
-			return;
+			return ok;
 		}
 
 		int setupTimes = 0;
 
 		for (int i = infos.size() - daysToNow - 1; i < infos.size(); i++) {
-			if (infos.get(i).getClose() < infos.get(i - buySetupBeforeDay).getClose()) {
+			if (infos.get(i).getClose() < infos.get(i - buySetupBeforeDay)
+					.getClose()) {
 				setupTimes++;
 			} else {
 				if (setupReady) {
@@ -66,19 +68,16 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 
 		prepareCountDownData();
 		if (selectList.isEmpty()) {
-			return;
+			return ok;
 		}
 
 		filter(selectList);
-
-		SelectResult sr = new SelectResult();
-		sr.setStock(getStock());
 		String msg = format(selectList, getStock());
 		if (msg != null) {
-			sr.setMsg(msg);
-			results.add(sr);
+			resultInfo.appendMessage(msg);
+			ok = true;
 		}
-
+		return ok;
 	}
 
 	private void filter(List<DemarkSelect> selectList2) {
@@ -101,7 +100,8 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 		}
 	}
 
-	private void findCountDownResult(DemarkSelect demarkSelect, List<DailyInfo> infos) {
+	private void findCountDownResult(DemarkSelect demarkSelect,
+			List<DailyInfo> infos) {
 		int index = infos.indexOf(demarkSelect.getSetupPoint());
 		int number = 0;
 		DailyInfo countDownPoint = null;
@@ -129,16 +129,21 @@ public class DemarkAnalyzer extends AbstractStockAnalyzer {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		sb.append(stock.getCode()).append("  ").append(stock.getName()).append("\n");
+		sb.append(stock.getCode()).append("  ").append(stock.getName())
+				.append("\n");
 		// 000001 平安银行
 		// 2012-2-12 (9) --- 2012-3-30 (13)
 		// 2013-1-12 (9) --- 2013-2-28 (13)
 		for (int i = 0; i < selectList.size(); i++) {
-			sb.append(Utils.format(selectList.get(i).getSetupPoint().getTime())).append("(")
-					.append(selectList.get(i).getSetupNumber()).append(")  --- ");
+			sb.append(Utils.format(selectList.get(i).getSetupPoint().getTime()))
+					.append("(").append(selectList.get(i).getSetupNumber())
+					.append(")  --- ");
 			if (selectList.get(i).getCountDownPoint() != null) {
-				sb.append(Utils.format(selectList.get(i).getCountDownPoint().getTime())).append("(")
-						.append(selectList.get(i).getCountDownNumber()).append(") ");
+				sb.append(
+						Utils.format(selectList.get(i).getCountDownPoint()
+								.getTime())).append("(")
+						.append(selectList.get(i).getCountDownNumber())
+						.append(") ");
 			}
 			sb.append(" \n");
 		}

@@ -1,11 +1,9 @@
 package stock.selector.controller;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -13,17 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
-
 import stock.selector.dao.IStockDAO;
-import stock.selector.model.SelectResult;
-import stock.selector.process.HistoryDataService;
-import stock.selector.process.StockSelector;
+import stock.selector.model.ResultInfo;
+import stock.selector.process.PriceLimitAnalyzer;
+import stock.selector.process.StockSelectService;
+import stock.selector.process.SuddentHighVolumeAnalyzer;
 import stock.selector.process.YesterdayOnceMoreAnalyzer;
 import stock.selector.process.io.ConsoleResultWriter;
 import stock.selector.process.io.HtmlFileResultWriter;
 import stock.selector.process.io.IResultWriter;
 import stock.selector.util.SystemEnv;
+
+import com.alibaba.fastjson.JSON;
 
 @RestController
 public class AnalyzeController {
@@ -50,7 +49,7 @@ public class AnalyzeController {
 		analyzer.setCloseRangeTop(systemEnv
 				.getDouble("YOM.analyzer.closeRangeTop"));
 
-		HistoryDataService hs = new HistoryDataService();
+		StockSelectService hs = new StockSelectService();
 
 		hs.setStockDAO(stockDAO);
 
@@ -58,10 +57,10 @@ public class AnalyzeController {
 
 		hs.startAnalyze();
 
-		List<SelectResult> result = analyzer.getResults();
+		List<ResultInfo> result = hs.getSelectResultList();
 
 		StringBuilder sb = new StringBuilder();
-		for (SelectResult selectResult : result) {
+		for (ResultInfo selectResult : result) {
 			sb.append(selectResult.getMsg()).append("<br/><br/>");
 		}
 
@@ -73,6 +72,35 @@ public class AnalyzeController {
 		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
+	}
+
+	@RequestMapping("/high_volume")
+	public String runSuddentHighVolumeAnalyzer(
+			@RequestParam(value = "name", defaultValue = "World") String name) {
+		StockSelectService hs = new StockSelectService();
+		hs.setStockDAO(stockDAO);
+		{
+			SuddentHighVolumeAnalyzer analyzer = new SuddentHighVolumeAnalyzer();
+			hs.addAnalyzer(analyzer);
+		}
+		{
+			PriceLimitAnalyzer analyzer = new PriceLimitAnalyzer();
+			hs.addAnalyzer(analyzer);
+		}
+
+		hs.startAnalyze();
+
+		List<ResultInfo> result = hs.getSelectResultList();
+
+		String json = JSON.toJSONString(result);
+
+		StringBuilder sb = new StringBuilder();
+		for (ResultInfo selectResult : result) {
+			sb.append(selectResult.getMsg()).append("<br/><br/>");
+		}
+
+		return sb.toString();
+
 	}
 
 	public IResultWriter getResultWriter() throws IOException {
