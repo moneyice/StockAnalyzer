@@ -103,5 +103,4 @@ public class StockInfoSpider {
 	public static void main(String[] args) {
 
 	}
-
 }
