@@ -17,6 +17,8 @@ public class SuddentHighVolumeAnalyzer extends AbstractStockAnalyzer {
 	// volume increase in times
 	double volumeIncrease = 2.5;
 
+	double[] riseRange = { 0.001, 0.06 };
+
 	public SuddentHighVolumeAnalyzer() {
 	}
 
@@ -34,8 +36,12 @@ public class SuddentHighVolumeAnalyzer extends AbstractStockAnalyzer {
 			double times = ((double) toCheck.getVolume() / compare.getVolume());
 			times = Utils.get2Double(times);
 			boolean condition = times >= volumeIncrease;
+			double risePercentage = (toCheck.getClose() - compare.getClose())
+					/ toCheck.getClose();
 
-			if (condition) {
+			boolean condition2 = risePercentage >= riseRange[0]
+					&& risePercentage <= riseRange[1];
+			if (condition && condition2) {
 				String msg = format(stock, toCheck, times);
 				resultInfo.appendMessage(msg);
 				ok = true;
