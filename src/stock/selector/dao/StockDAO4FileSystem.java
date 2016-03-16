@@ -27,10 +27,16 @@ public class StockDAO4FileSystem implements IStockDAO {
 	public StockDAO4FileSystem() {
 	}
 
+	private String getRootPath() {
+		if (root == null) {
+			root = systemEnv.getString("local.data.cache.folder");
+		}
+		return root;
+	}
+
 	public void storeAllSymbols(List<Stock> list) {
-		this.root = systemEnv.getString("local.data.cache.folder");
 		String allSymbols = JSON.toJSONString(list);
-		File to = new File(root, "allSymbols");
+		File to = new File(getRootPath(), "allSymbols");
 		try {
 			Files.write(allSymbols, to, Charset.forName("UTF-8"));
 		} catch (IOException e) {
@@ -40,7 +46,7 @@ public class StockDAO4FileSystem implements IStockDAO {
 
 	public void storeStock(Stock stock) {
 		String jsonStock = JSON.toJSONString(stock);
-		File to = new File(root, stock.getCode());
+		File to = new File(getRootPath(), stock.getCode());
 		try {
 			Files.write(jsonStock, to, Charset.forName("UTF-8"));
 		} catch (IOException e) {
@@ -49,7 +55,7 @@ public class StockDAO4FileSystem implements IStockDAO {
 	}
 
 	public Stock getStock(String code) {
-		File from = new File(root, code);
+		File from = new File(getRootPath(), code);
 		String rs;
 		try {
 			rs = Files.readFirstLine(from, Charset.forName("UTF-8"));
@@ -65,7 +71,7 @@ public class StockDAO4FileSystem implements IStockDAO {
 	}
 
 	public List<Stock> getAllSymbols() {
-		File from = new File(root, "allSymbols");
+		File from = new File(getRootPath(), "allSymbols");
 		String rs;
 		try {
 			rs = Files.readFirstLine(from, Charset.forName("UTF-8"));
@@ -79,15 +85,14 @@ public class StockDAO4FileSystem implements IStockDAO {
 	}
 
 	public Date getStockUpdateTime(String code) {
-		File file = new File(root, code);
+		File file = new File(getRootPath(), code);
 		long time = file.lastModified();
 		Date lastDate = new Date(time);
 		return lastDate;
 	}
 
 	public Date getAllSymbolsUpdateTime() {
-		this.root = systemEnv.getString("local.data.cache.folder");
-		File file = new File(root, "allSymbols");
+		File file = new File(getRootPath(), "allSymbols");
 		long time = file.lastModified();
 		Date lastDate = new Date(time);
 		return lastDate;

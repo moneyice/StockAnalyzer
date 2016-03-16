@@ -19,8 +19,8 @@ public class ScheduledController {
 	private StockInfoSpider stockInfoSpider = null;
 
 	@Scheduled(fixedRate = 500000)
-	public void reportCurrentTime() {
-		System.out.println("The time is now " + dateFormat.format(new Date()));
+	public void retrieveStockDailyData() {
+		stockInfoSpider.setCheckOutOfDate(true);
 		stockInfoSpider.run();
 	}
 }

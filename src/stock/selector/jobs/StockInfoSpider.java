@@ -28,6 +28,20 @@ public class StockInfoSpider {
 
 	}
 
+	// if it's needed to check the stock info is out of date
+	// if true, check
+	// if false, no need to check, will refresh all the data forcedly.
+	// it's useless for getAllStockSymbols
+	private boolean checkOutOfDate = true;
+
+	public boolean isCheckOutOfDate() {
+		return checkOutOfDate;
+	}
+
+	public void setCheckOutOfDate(boolean checkOutOfDate) {
+		this.checkOutOfDate = checkOutOfDate;
+	}
+
 	public void run() {
 		try {
 			Date lastUpdateTime = dao.getAllSymbolsUpdateTime();
@@ -46,7 +60,7 @@ public class StockInfoSpider {
 				}
 
 				String code = stock.getCode();
-				if (code.startsWith("0") || code.startsWith("3")
+				if (true || code.startsWith("0") || code.startsWith("3")
 						|| code.startsWith("6")) {
 					lastUpdateTime = dao.getStockUpdateTime(stock.getCode());
 					if (lastUpdateTime == null
@@ -76,6 +90,10 @@ public class StockInfoSpider {
 	}
 
 	private boolean isStockOutOfDate(Date lastUpdateTime) {
+		if (!isCheckOutOfDate()) {
+			return true;
+		}
+
 		if (lastUpdateTime == null) {
 			return true;
 		}

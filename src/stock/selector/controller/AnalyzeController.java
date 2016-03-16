@@ -84,8 +84,8 @@ public class AnalyzeController {
 			hs.addAnalyzer(analyzer);
 		}
 		{
-			PriceLimitAnalyzer analyzer = new PriceLimitAnalyzer();
-			hs.addAnalyzer(analyzer);
+//			PriceLimitAnalyzer analyzer = new PriceLimitAnalyzer();
+//			hs.addAnalyzer(analyzer);
 		}
 
 		hs.startAnalyze();
