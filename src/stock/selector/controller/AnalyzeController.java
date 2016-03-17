@@ -40,20 +40,25 @@ public class AnalyzeController {
 	public String runYOMAnalyzer(
 			@RequestParam(value = "name", defaultValue = "World") String name) {
 
-		YesterdayOnceMoreAnalyzer analyzer = new YesterdayOnceMoreAnalyzer();
-		analyzer.setDaysToNow(systemEnv.getInt("YOM.analyzer.daysToNow"));
-		analyzer.setRangeDays(systemEnv.getInt("YOM.analyzer.rangeDays"));
-		analyzer.setRange(systemEnv.getDouble("YOM.analyzer.range"));
-		analyzer.setCloseRangeDown(systemEnv
-				.getDouble("YOM.analyzer.closeRangeDown"));
-		analyzer.setCloseRangeTop(systemEnv
-				.getDouble("YOM.analyzer.closeRangeTop"));
-
 		StockSelectService hs = new StockSelectService();
 
 		hs.setStockDAO(stockDAO);
+		{
+			YesterdayOnceMoreAnalyzer analyzer = new YesterdayOnceMoreAnalyzer();
+			analyzer.setDaysToNow(systemEnv.getInt("YOM.analyzer.daysToNow"));
+			analyzer.setRangeDays(systemEnv.getInt("YOM.analyzer.rangeDays"));
+			analyzer.setRange(systemEnv.getDouble("YOM.analyzer.range"));
+			analyzer.setCloseRangeDown(systemEnv
+					.getDouble("YOM.analyzer.closeRangeDown"));
+			analyzer.setCloseRangeTop(systemEnv
+					.getDouble("YOM.analyzer.closeRangeTop"));
+			hs.addAnalyzer(analyzer);
+		}
 
-		hs.addAnalyzer(analyzer);
+		{
+			SuddentHighVolumeAnalyzer analyzer = new SuddentHighVolumeAnalyzer();
+			hs.addAnalyzer(analyzer);
+		}
 
 		hs.startAnalyze();
 
@@ -84,8 +89,8 @@ public class AnalyzeController {
 			hs.addAnalyzer(analyzer);
 		}
 		{
-//			PriceLimitAnalyzer analyzer = new PriceLimitAnalyzer();
-//			hs.addAnalyzer(analyzer);
+			// PriceLimitAnalyzer analyzer = new PriceLimitAnalyzer();
+			// hs.addAnalyzer(analyzer);
 		}
 
 		hs.startAnalyze();

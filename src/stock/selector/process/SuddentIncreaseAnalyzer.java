@@ -46,8 +46,6 @@ public class SuddentIncreaseAnalyzer extends AbstractStockAnalyzer {
 			boolean condition2 = percent * 100 <= decrease;
 
 			if (condition1 && condition2) {
-				ResultInfo result = new ResultInfo();
-				result.setStock(stock);
 				String msg = format(stock, current, toCheck);
 				resultInfo.appendMessage(msg);
 				ok = true;

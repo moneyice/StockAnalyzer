@@ -107,6 +107,8 @@ public class StockSelectService {
 			}
 		}
 		if (resultInfo != null) {
+			// shrink the transferred data
+			stock.setDailyinfo(null);
 			resultInfo.setStock(stock);
 		}
 		return resultInfo;

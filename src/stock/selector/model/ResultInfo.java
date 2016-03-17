@@ -11,7 +11,6 @@ public class ResultInfo {
 
 	public void setStock(Stock stock) {
 		this.stock = stock;
-		stock.setDailyinfo(null);
 	}
 
 	public String getMsg() {
