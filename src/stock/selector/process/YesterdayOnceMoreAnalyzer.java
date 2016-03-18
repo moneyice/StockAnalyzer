@@ -51,7 +51,7 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 			boolean condition2 = r >= closeRangeDown && r <= closeRangeTop;
 
 			if (condition1 && condition2) {
-				String msg = format(stock, from, end, current);
+				String msg = format(stock, from, end);
 				ok = true;
 				resultInfo.appendMessage(msg);
 				break;
@@ -60,8 +60,7 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 		return ok;
 	}
 
-	public String format(Stock stock, DailyInfo from, DailyInfo end,
-			DailyInfo now) {
+	public String format(Stock stock, DailyInfo from, DailyInfo end) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(stock.getCode()).append("  ").append(stock.getName())
 				.append("\n");
@@ -75,7 +74,7 @@ public class YesterdayOnceMoreAnalyzer extends AbstractStockAnalyzer {
 				/ from.getClose();
 		sb.append("涨幅：").append(Utils.double2Percentage(risingRange))
 				.append("\n");
-		sb.append("现价: ").append(now.getClose()).append("\n\r");
+		sb.append("现价: ").append(getCurrentPrice(stock)).append("\n\r");
 		return (sb.toString());
 	}
 

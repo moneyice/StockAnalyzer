@@ -41,8 +41,9 @@ public abstract class AbstractStockAnalyzer implements IStockAnalyzer {
 	public void outPutResults() {
 		// getResultwriter().write(results);
 	}
-	
-	public double getCurrentPrice() {
-		return stock.getDailyinfo().get(stock.getDailyinfo().size()-1).getClose();
+
+	public double getCurrentPrice(Stock stock) {
+		return stock.getDailyinfo().get(stock.getDailyinfo().size() - 1)
+				.getClose();
 	}
 }

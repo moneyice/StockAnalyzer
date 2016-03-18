@@ -2,7 +2,7 @@ package stock.selector.controller;
 
 import javax.annotation.Resource;
 
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +41,7 @@ public class StockController {
 	}
 
 	@RequestMapping("/force_refresh_stocks")
+	@Async
 	public void retrieveStockDailyData() {
 		stockInfoSpider.setCheckOutOfDate(false);
 		stockInfoSpider.run();

@@ -56,7 +56,7 @@ public class SuddentLowVolumeAnalyzer extends AbstractStockAnalyzer {
 		sb.append(
 				"跌幅：" + (check.getClose() - check.getOpen()) / check.getOpen()
 						* 100).append("%\n");
-		sb.append("现价: ").append(getCurrentPrice()).append("\n\r");
+		sb.append("现价: ").append(getCurrentPrice(stock)).append("\n\r");                                                                                                                                                                                                                            
 		return (sb.toString());
 	}
 
