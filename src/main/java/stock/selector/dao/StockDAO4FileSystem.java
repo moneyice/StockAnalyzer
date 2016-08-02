@@ -72,6 +72,9 @@ public class StockDAO4FileSystem implements IStockDAO {
 
 	public List<Stock> getAllSymbols() {
 		File from = new File(getRootPath(), "allSymbols");
+		if(!from.exists()){
+			from.mkdirs();
+		}
 		String rs;
 		try {
 			rs = Files.readFirstLine(from, Charset.forName("UTF-8"));

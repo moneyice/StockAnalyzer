@@ -9,6 +9,6 @@ public class GreetingController {
 	@RequestMapping("/greeting")
 	public String greeting(
 			@RequestParam(value = "name", defaultValue = "World") String name) {
-		return "name";
+		return "hello "+ name;
 	}
 }
