@@ -81,17 +81,17 @@ public class AnalyzeController {
 
 	@RequestMapping("/high_volume")
 	public String runSuddentHighVolumeAnalyzer(
-			@RequestParam(value = "name", defaultValue = "World") String name) {
+			@RequestParam String daysToNow,@RequestParam String occurTimes,@RequestParam String volumeIncrease) {
 		StockSelectService hs = new StockSelectService();
 		hs.setStockDAO(stockDAO);
-		{
 			SuddentHighVolumeAnalyzer analyzer = new SuddentHighVolumeAnalyzer();
+			analyzer.setDaysToNow(daysToNow);
+			analyzer.setOccurTimes(occurTimes);
+			analyzer.setVolumeIncrease(volumeIncrease);
+
+
 			hs.addAnalyzer(analyzer);
-		}
-		{
-			// PriceLimitAnalyzer analyzer = new PriceLimitAnalyzer();
-			// hs.addAnalyzer(analyzer);
-		}
+
 
 		hs.startAnalyze();
 
@@ -100,6 +100,7 @@ public class AnalyzeController {
 		String json = JSON.toJSONString(result);
 
 		StringBuilder sb = new StringBuilder();
+		sb.append(analyzer.getDescription()).append("<br/><br/>");
 		for (ResultInfo selectResult : result) {
 			sb.append(selectResult.getMsg()).append("<br/><br/>");
 		}

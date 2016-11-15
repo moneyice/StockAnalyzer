@@ -11,10 +11,13 @@ import stock.selector.util.Utils;
 //n天之内某一天成交量是前一天的  x 倍
 public class SuddentHighVolumeAnalyzer extends AbstractStockAnalyzer {
 
+	String descTemplate="在%d个工作日内，发生过%d次成交量是前一天的%f倍";
 	// consider how many days before now.
-	int daysToNow = 5;
+	int daysToNow = 20;
+	//how many times this occurs
+	int occurTimes=3;
 
-	// volume increase in times
+	// volume increase times
 	double volumeIncrease = 2.5;
 
 	double[] riseRange = { 0.001, 0.06 };
@@ -26,27 +29,31 @@ public class SuddentHighVolumeAnalyzer extends AbstractStockAnalyzer {
 		boolean ok = false;
 		List<DailyInfo> infos = stock.getDailyinfo();
 		if (infos.size() < daysToNow + 1) {
-			// 元数据天数要求大于考察天数+1
+			// 元数据天数要求大于等于考察天数+1
 			return ok;
 		}
+		int actualOccurTimes=0;
 		for (int i = infos.size() - daysToNow; i < infos.size(); i++) {
 			DailyInfo toCheck = infos.get(i);
 
 			DailyInfo compare = infos.get(i - 1);
-			double times = ((double) toCheck.getVolume() / compare.getVolume());
-			times = Utils.get2Double(times);
-			boolean condition = times >= volumeIncrease;
-			double risePercentage = (toCheck.getClose() - compare.getClose())
-					/ toCheck.getClose();
+			double actualVolumeIncrease = ((double) toCheck.getVolume() / compare.getVolume());
+            actualVolumeIncrease = Utils.get2Double(actualVolumeIncrease);
+            if(actualVolumeIncrease >= volumeIncrease){
+                actualOccurTimes++;
+            }
+            if(actualOccurTimes>= occurTimes){
+                String msg = format(stock, toCheck, actualVolumeIncrease);
+                resultInfo.appendMessage(msg);
+                ok = true;
+                break;
+            }
+//			boolean condition = actualVolumeIncrease >= volumeIncrease;
+//			double risePercentage = (toCheck.getClose() - compare.getClose())
+//					/ toCheck.getClose();
 
-			boolean condition2 = risePercentage >= riseRange[0]
-					&& risePercentage <= riseRange[1];
-			if (condition && condition2) {
-				String msg = format(stock, toCheck, times);
-				resultInfo.appendMessage(msg);
-				ok = true;
-				break;
-			}
+//			boolean condition2 = risePercentage >= riseRange[0]
+//					&& risePercentage <= riseRange[1];
 		}
 		return ok;
 	}
@@ -55,28 +62,29 @@ public class SuddentHighVolumeAnalyzer extends AbstractStockAnalyzer {
 		StringBuilder sb = new StringBuilder();
 		sb.append(stock.getCode()).append("  ").append(stock.getName())
 				.append("\n");
-		sb.append("时间：").append(check.getTime()).append("\n");
-		sb.append("成交量放大倍数：" + times).append("\n");
-		sb.append("现价: ").append(getCurrentPrice(stock)).append("\n\r");
+//		sb.append("时间：").append(check.getTime()).append("\n");
+//		sb.append("成交量放大倍数：" + times).append("\n");
+//		sb.append("现价: ").append(getCurrentPrice(stock)).append("\n\r");
 		return (sb.toString());
 	}
 
 	public String getDescription() {
-		return daysToNow + "天之内成交量是前一天的";
+		return String.format(descTemplate,daysToNow,occurTimes,volumeIncrease);
 	}
 
 	public int getDaysToNow() {
 		return daysToNow;
 	}
 
-	public void setDaysToNow(int daysToNow) {
-		this.daysToNow = daysToNow;
+	public void setDaysToNow(String daysToNow) {
+		this.daysToNow = Integer.valueOf(daysToNow);
 	}
 
-	public static void main(String[] args) {
-		double decrease = -2;
-		double decreaseReage = -2.7;
-		boolean condition1 = decreaseReage * 100 <= decrease;
-		System.out.println(condition1);
-	}
+    public void setOccurTimes(String occurTimes) {
+        this.occurTimes = Integer.valueOf(occurTimes);
+    }
+
+    public void setVolumeIncrease(String volumeIncrease) {
+        this.volumeIncrease = Double.valueOf(volumeIncrease);
+    }
 }

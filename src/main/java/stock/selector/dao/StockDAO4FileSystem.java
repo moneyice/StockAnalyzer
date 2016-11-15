@@ -35,6 +35,10 @@ public class StockDAO4FileSystem implements IStockDAO {
 	}
 
 	public void storeAllSymbols(List<Stock> list) {
+		File rootFolder=new File(getRootPath());
+		if(!rootFolder.exists()){
+			rootFolder.mkdirs();
+		}
 		String allSymbols = JSON.toJSONString(list);
 		File to = new File(getRootPath(), "allSymbols");
 		try {
@@ -71,9 +75,13 @@ public class StockDAO4FileSystem implements IStockDAO {
 	}
 
 	public List<Stock> getAllSymbols() {
+		File rootFolder=new File(getRootPath());
+		if(!rootFolder.exists()){
+			rootFolder.mkdirs();
+		}
 		File from = new File(getRootPath(), "allSymbols");
 		if(!from.exists()){
-			from.mkdirs();
+			return null;
 		}
 		String rs;
 		try {
@@ -84,7 +92,6 @@ public class StockDAO4FileSystem implements IStockDAO {
 			e.printStackTrace();
 		}
 		return null;
-
 	}
 
 	public Date getStockUpdateTime(String code) {
