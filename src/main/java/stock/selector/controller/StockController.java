@@ -41,7 +41,7 @@ public class StockController {
 	}
 
 	@RequestMapping("/force_refresh_stocks")
-	@Async
+	//@Async
 	public void retrieveStockDailyData() {
 		stockInfoSpider.setCheckOutOfDate(false);
 		stockInfoSpider.run();

@@ -80,34 +80,51 @@ public class AnalyzeController {
 	}
 
 	@RequestMapping("/high_volume")
-	public String runSuddentHighVolumeAnalyzer(
-			@RequestParam String daysToNow,@RequestParam String occurTimes,@RequestParam String volumeIncrease) {
-		StockSelectService hs = new StockSelectService();
-		hs.setStockDAO(stockDAO);
-			SuddentHighVolumeAnalyzer analyzer = new SuddentHighVolumeAnalyzer();
-			analyzer.setDaysToNow(daysToNow);
-			analyzer.setOccurTimes(occurTimes);
-			analyzer.setVolumeIncrease(volumeIncrease);
+    public String runSuddentHighVolumeAnalyzer(
+            @RequestParam String daysToNow,@RequestParam String occurTimes,@RequestParam String volumeIncrease) {
+        StockSelectService hs = new StockSelectService();
+        hs.setStockDAO(stockDAO);
+        SuddentHighVolumeAnalyzer analyzer = new SuddentHighVolumeAnalyzer();
+        analyzer.setDaysToNow(daysToNow);
+        analyzer.setOccurTimes(occurTimes);
+        analyzer.setVolumeIncrease(volumeIncrease);
 
 
-			hs.addAnalyzer(analyzer);
+        hs.addAnalyzer(analyzer);
 
 
-		hs.startAnalyze();
+        hs.startAnalyze();
 
-		List<ResultInfo> result = hs.getSelectResultList();
+        List<ResultInfo> result = hs.getSelectResultList();
 
-		String json = JSON.toJSONString(result);
+        String json = JSON.toJSONString(result);
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(analyzer.getDescription()).append("<br/><br/>");
-		for (ResultInfo selectResult : result) {
-			sb.append(selectResult.getMsg()).append("<br/><br/>");
-		}
+        StringBuilder sb = new StringBuilder();
+        sb.append(analyzer.getDescription()).append("<br/><br/>");
+        for (ResultInfo selectResult : result) {
+            sb.append(selectResult.getMsg()).append("<br/><br/>");
+        }
 
-		return sb.toString();
+        return sb.toString();
 
-	}
+    }
+
+    @RequestMapping("/high_volume_lite")
+    public String runSuddentHighVolumeAnalyzer() {
+        StockSelectService hs = new StockSelectService();
+        hs.setStockDAO(stockDAO);
+        SuddentHighVolumeLiteAnalyzer analyzer = new SuddentHighVolumeLiteAnalyzer();
+        hs.addAnalyzer(analyzer);
+        hs.startAnalyze();
+        List<ResultInfo> result = hs.getSelectResultList();
+        String json = JSON.toJSONString(result);
+        StringBuilder sb = new StringBuilder();
+        sb.append(analyzer.getDescription()).append("<br/><br/>");
+        for (ResultInfo selectResult : result) {
+            sb.append(selectResult.getMsg()).append("<br/><br/>");
+        }
+        return sb.toString();
+    }
 
 	public IResultWriter getResultWriter() throws IOException {
 		Calendar cal = Calendar.getInstance();
